@@ -225,8 +225,8 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     int count = 0;
 
     for (int gradeLevel in gradeLevels) {
-      double gpa = calculateGPA(gradeLevel);
-      if (gpa > 0) {
+      if (coursesByGrade[gradeLevel]?.isNotEmpty ?? false) {
+        double gpa = calculateGPA(gradeLevel);
         totalGPA += gpa;
         count++;
       }
