@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'stats.dart';
 void main() {
   runApp(MyApp());
 }
@@ -27,8 +27,8 @@ class CalculatorScreen extends StatefulWidget {
 class _CalculatorScreenState extends State<CalculatorScreen> {
   List<String> grades = ['A', 'B', 'C', 'D', 'F'];
   String selectedGrade = 'A';
-  List<double> credits = [4.0, 2.5];
-  double selectedCredits = 4.0;
+  List<double> credits = [5.0, 2.5];
+  double selectedCredits = 5.0;
   List<Map<String, dynamic>> courses = [];
   TextEditingController courseNameController = TextEditingController();
 
@@ -37,6 +37,15 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('GPA Calculator'),
+          leading: IconButton(
+            icon: Icon(Icons.school),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => StatisticsScreen()),
+              );
+            },
+          ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -113,7 +122,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                   return ListTile(
                     title: Text(courses[index]['name']),
                     subtitle: Text(
-                      'Grade: ${courses[index]['grade']}, Credit Hours: ${courses[index]['credits']}',
+                      'Grade: ${courses[index]['grade']}, Credits: ${courses[index]['credits']}',
                     ),
                     trailing: IconButton(
                       icon: Icon(Icons.delete),
@@ -134,7 +143,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                   'GPA: ${calculateGPA().toStringAsFixed(2)}',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-            SizedBox(height: 40),
+                SizedBox(height: 40),
               ],
             ),
           ],
@@ -191,9 +200,3 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     }
   }
 }
-/* 
-TODO: FIX GPA CALCULATIONS ACORDING TO HOW OUR SCHOOL DOES IT!!!
-
-
-
- */
