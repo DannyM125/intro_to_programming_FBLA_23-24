@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'stats.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -25,11 +26,13 @@ class CalculatorScreen extends StatefulWidget {
 }
 
 class _CalculatorScreenState extends State<CalculatorScreen> {
-  List<String> grades = ['A', 'B', 'C', 'D', 'F'];
-  String selectedGrade = 'A';
+  List<String> letterGrades = ['A', 'B', 'C', 'D', 'F'];
+  String selectedLetterGrade = 'A';
+  List<int> gradeLevels = [9, 10, 11, 12];
+  int selectedGradeLevel = 9;
   List<double> credits = [5.0, 2.5];
   double selectedCredits = 5.0;
-  List<Map<String, dynamic>> courses = [];
+  Map<int, List<Map<String, dynamic>>> coursesByGrade = {};
   TextEditingController courseNameController = TextEditingController();
 
   @override
@@ -37,15 +40,15 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('GPA Calculator'),
-          leading: IconButton(
-            icon: Icon(Icons.school),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => StatisticsScreen()),
-              );
-            },
-          ),
+        leading: IconButton(
+          icon: Icon(Icons.school),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => StatisticsScreen()),
+            );
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -53,9 +56,28 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 10),
-            Text(
-              'Add Course:',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            Row(
+              children: [
+                DropdownButton<int>(
+                  value: selectedGradeLevel,
+                  onChanged: (int? newValue) {
+                    setState(() {
+                      selectedGradeLevel = newValue!;
+                    });
+                  },
+                  items: gradeLevels.map<DropdownMenuItem<int>>((int value) {
+                    return DropdownMenuItem<int>(
+                      value: value,
+                      child: Text('Grade $value'),
+                    );
+                  }).toList(),
+                ),
+                SizedBox(width: 16),
+                Text(
+                  'Add Course for Grade $selectedGradeLevel:',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ],
             ),
             SizedBox(height: 8),
             Row(
@@ -70,13 +92,13 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                 ),
                 SizedBox(width: 16),
                 DropdownButton<String>(
-                  value: selectedGrade,
+                  value: selectedLetterGrade,
                   onChanged: (String? newValue) {
                     setState(() {
-                      selectedGrade = newValue!;
+                      selectedLetterGrade = newValue!;
                     });
                   },
-                  items: grades
+                  items: letterGrades
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -92,8 +114,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                       selectedCredits = newValue!;
                     });
                   },
-                  items: credits
-                      .map<DropdownMenuItem<double>>((double value) {
+                  items: credits.map<DropdownMenuItem<double>>((double value) {
                     return DropdownMenuItem<double>(
                       value: value,
                       child: Text(value.toString()),
@@ -111,18 +132,19 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
             ),
             SizedBox(height: 20),
             Text(
-              'Courses:',
+              'Courses for Grade $selectedGradeLevel:',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 8),
             Expanded(
               child: ListView.builder(
-                itemCount: courses.length,
+                itemCount: coursesByGrade[selectedGradeLevel]?.length ?? 0,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    title: Text(courses[index]['name']),
+                    title: Text(
+                        coursesByGrade[selectedGradeLevel]![index]['name']),
                     subtitle: Text(
-                      'Grade: ${courses[index]['grade']}, Credits: ${courses[index]['credits']}',
+                      'Grade: ${coursesByGrade[selectedGradeLevel]![index]['grade']}, Credits: ${coursesByGrade[selectedGradeLevel]![index]['credits']}',
                     ),
                     trailing: IconButton(
                       icon: Icon(Icons.delete),
@@ -140,10 +162,20 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               children: [
                 SizedBox(width: 20),
                 Text(
-                  'GPA: ${calculateGPA().toStringAsFixed(2)}',
+                  'GPA: ${calculateGPA(selectedGradeLevel).toStringAsFixed(2)}',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 40),
+              ],
+            ),
+            SizedBox(height: 20),
+            Row(
+              children: [
+                SizedBox(width: 20),
+                Text(
+                  'Weighted GPA: ${calculateWeightedGPA().toStringAsFixed(2)}',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
               ],
             ),
           ],
@@ -157,11 +189,14 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     if (courseName.isNotEmpty) {
       Map<String, dynamic> course = {
         'name': courseName,
-        'grade': selectedGrade,
+        'grade': selectedLetterGrade,
         'credits': selectedCredits,
       };
       setState(() {
-        courses.add(course);
+        if (coursesByGrade[selectedGradeLevel] == null) {
+          coursesByGrade[selectedGradeLevel] = [];
+        }
+        coursesByGrade[selectedGradeLevel]!.add(course);
         courseNameController.text = '';
       });
     }
@@ -169,20 +204,35 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
 
   void removeCourse(int index) {
     setState(() {
-      courses.removeAt(index);
+      coursesByGrade[selectedGradeLevel]!.removeAt(index);
     });
   }
 
-  double calculateGPA() {
+  double calculateGPA(int gradeLevel) {
     double totalPoints = 0;
     double totalCredits = 0;
 
-    for (var course in courses) {
+    for (var course in coursesByGrade[gradeLevel] ?? []) {
       totalPoints += gradeToPoint(course['grade']) * course['credits'];
       totalCredits += course['credits'];
     }
 
-    return totalPoints / totalCredits;
+    return totalCredits != 0 ? totalPoints / totalCredits : 0.0;
+  }
+
+  double calculateWeightedGPA() {
+    double totalGPA = 0;
+    int count = 0;
+
+    for (int gradeLevel in gradeLevels) {
+      double gpa = calculateGPA(gradeLevel);
+      if (gpa > 0) {
+        totalGPA += gpa;
+        count++;
+      }
+    }
+
+    return count > 0 ? totalGPA / count : 0.0;
   }
 
   double gradeToPoint(String grade) {

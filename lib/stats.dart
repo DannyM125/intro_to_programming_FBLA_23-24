@@ -8,7 +8,7 @@ class StatisticsScreen extends StatelessWidget {
         title: Text('GPA Statistics'),
       ),
       body: Center(
-        child: Text('Statistics Screen Content'),
+        child: Text('Statistics Screen'),
       ),
     );
   }
