@@ -1,5 +1,36 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'stats.dart';
+
+class Course {
+  String name;
+  String grade;
+  double credits;
+
+  Course({
+    required this.name,
+    required this.grade,
+    required this.credits,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'grade': grade,
+      'credits': credits,
+    };
+  }
+
+  factory Course.fromJson(Map<String, dynamic> json) {
+    return Course(
+      name: json['name'],
+      grade: json['grade'],
+      credits: json['credits'],
+    );
+  }
+}
 
 void main() {
   runApp(MyApp());
@@ -32,8 +63,15 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   int selectedGradeLevel = 9;
   List<double> credits = [5.0, 2.5];
   double selectedCredits = 5.0;
-  Map<int, List<Map<String, dynamic>>> coursesByGrade = {};
+  List<Course> courses = [];
   TextEditingController courseNameController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Load courses from SharedPreferences when the widget is created.
+    loadCourses();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -138,13 +176,12 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
             SizedBox(height: 8),
             Expanded(
               child: ListView.builder(
-                itemCount: coursesByGrade[selectedGradeLevel]?.length ?? 0,
+                itemCount: courses.length,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    title: Text(
-                        coursesByGrade[selectedGradeLevel]![index]['name']),
+                    title: Text(courses[index].name),
                     subtitle: Text(
-                      'Grade: ${coursesByGrade[selectedGradeLevel]![index]['grade']}, Credits: ${coursesByGrade[selectedGradeLevel]![index]['credits']}',
+                      'Grade: ${courses[index].grade}, Credits: ${courses[index].credits}',
                     ),
                     trailing: IconButton(
                       icon: Icon(Icons.delete),
@@ -181,40 +218,64 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          saveCourses();
+        },
+        child: Icon(Icons.save),
+      ),
     );
   }
 
   void addCourse() {
     String courseName = courseNameController.text;
     if (courseName.isNotEmpty) {
-      Map<String, dynamic> course = {
-        'name': courseName,
-        'grade': selectedLetterGrade,
-        'credits': selectedCredits,
-      };
+      Course course = Course(
+        name: courseName,
+        grade: selectedLetterGrade,
+        credits: selectedCredits,
+      );
       setState(() {
-        if (coursesByGrade[selectedGradeLevel] == null) {
-          coursesByGrade[selectedGradeLevel] = [];
-        }
-        coursesByGrade[selectedGradeLevel]!.add(course);
+        courses.add(course);
         courseNameController.text = '';
       });
+      saveCourses(); // Save courses after adding a new course.
     }
   }
 
   void removeCourse(int index) {
     setState(() {
-      coursesByGrade[selectedGradeLevel]!.removeAt(index);
+      courses.removeAt(index);
+      saveCourses(); // Save courses after removing a course.
     });
+  }
+
+  void saveCourses() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> coursesJson =
+        courses.map((course) => jsonEncode(course.toJson())).toList();
+    prefs.setStringList('courses', coursesJson);
+  }
+
+  void loadCourses() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? coursesJson = prefs.getStringList('courses');
+    if (coursesJson != null) {
+      List<Course> loadedCourses =
+          coursesJson.map((json) => Course.fromJson(jsonDecode(json))).toList();
+      setState(() {
+        courses = loadedCourses;
+      });
+    }
   }
 
   double calculateGPA(int gradeLevel) {
     double totalPoints = 0;
     double totalCredits = 0;
 
-    for (var course in coursesByGrade[gradeLevel] ?? []) {
-      totalPoints += gradeToPoint(course['grade']) * course['credits'];
-      totalCredits += course['credits'];
+    for (var course in courses) {
+      totalPoints += gradeToPoint(course.grade) * course.credits;
+      totalCredits += course.credits;
     }
 
     return totalCredits != 0 ? totalPoints / totalCredits : 0.0;
@@ -225,7 +286,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     int count = 0;
 
     for (int gradeLevel in gradeLevels) {
-      if (coursesByGrade[gradeLevel]?.isNotEmpty ?? false) {
+      if (courses.isNotEmpty) {
         double gpa = calculateGPA(gradeLevel);
         totalGPA += gpa;
         count++;
