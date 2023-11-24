@@ -1,5 +1,35 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'stats.dart';
+
+class Course {
+  String name;
+  String grade;
+  double credits;
+
+  Course({
+    required this.name,
+    required this.grade,
+    required this.credits,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'grade': grade,
+      'credits': credits,
+    };
+  }
+
+  factory Course.fromJson(Map<String, dynamic> json) {
+    return Course(
+      name: json['name'],
+      grade: json['grade'],
+      credits: json['credits'].toDouble(),
+    );
+  }
+}
 
 void main() {
   runApp(MyApp());
@@ -32,8 +62,15 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   int selectedGradeLevel = 9;
   List<double> credits = [5.0, 2.5];
   double selectedCredits = 5.0;
-  Map<int, List<Map<String, dynamic>>> coursesByGrade = {};
+  Map<int, List<Course>> coursesByGrade = {};
   TextEditingController courseNameController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Load saved state when the widget is first created
+    loadAppState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -141,10 +178,10 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                 itemCount: coursesByGrade[selectedGradeLevel]?.length ?? 0,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    title: Text(
-                        coursesByGrade[selectedGradeLevel]![index]['name']),
+                    title:
+                        Text(coursesByGrade[selectedGradeLevel]![index].name),
                     subtitle: Text(
-                      'Grade: ${coursesByGrade[selectedGradeLevel]![index]['grade']}, Credits: ${coursesByGrade[selectedGradeLevel]![index]['credits']}',
+                      'Grade: ${coursesByGrade[selectedGradeLevel]![index].grade}, Credits: ${coursesByGrade[selectedGradeLevel]![index].credits}',
                     ),
                     trailing: IconButton(
                       icon: Icon(Icons.delete),
@@ -187,11 +224,12 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   void addCourse() {
     String courseName = courseNameController.text;
     if (courseName.isNotEmpty) {
-      Map<String, dynamic> course = {
-        'name': courseName,
-        'grade': selectedLetterGrade,
-        'credits': selectedCredits,
-      };
+      Course course = Course(
+        name: courseName,
+        grade: selectedLetterGrade,
+        credits: selectedCredits,
+      );
+
       setState(() {
         if (coursesByGrade[selectedGradeLevel] == null) {
           coursesByGrade[selectedGradeLevel] = [];
@@ -199,6 +237,9 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
         coursesByGrade[selectedGradeLevel]!.add(course);
         courseNameController.text = '';
       });
+
+      // Save state after adding a course
+      saveAppState();
     }
   }
 
@@ -206,6 +247,41 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     setState(() {
       coursesByGrade[selectedGradeLevel]!.removeAt(index);
     });
+    // Save state after removing a course
+    saveAppState();
+  }
+
+  void saveAppState() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    Map<String, dynamic> encodedData = {};
+    coursesByGrade.forEach((key, value) {
+      encodedData[key.toString()] =
+          value.map((course) => course.toJson()).toList();
+    });
+
+    String jsonData = jsonEncode(encodedData);
+
+    try {
+      await prefs.setString('coursesByGrade', jsonData);
+      print('App state saved successfully.');
+    } catch (e) {
+      print('Failed to save app state: $e');
+      // Handle the error as needed
+    }
+  }
+
+  void loadAppState() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? savedCourses = prefs.getString('coursesByGrade');
+    if (savedCourses != null) {
+      setState(() {
+        coursesByGrade = jsonDecode(savedCourses).map<int, List<Course>>(
+          (key, value) => MapEntry(
+              key, value.map((course) => Course.fromJson(course)).toList()),
+        );
+      });
+    }
   }
 
   double calculateGPA(int gradeLevel) {
@@ -213,8 +289,8 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     double totalCredits = 0;
 
     for (var course in coursesByGrade[gradeLevel] ?? []) {
-      totalPoints += gradeToPoint(course['grade']) * course['credits'];
-      totalCredits += course['credits'];
+      totalPoints += gradeToPoint(course.grade) * course.credits;
+      totalCredits += course.credits;
     }
 
     return totalCredits != 0 ? totalPoints / totalCredits : 0.0;
