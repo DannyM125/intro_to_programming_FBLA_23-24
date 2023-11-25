@@ -1,36 +1,8 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:intro_to_programming_fbla/Course.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'stats.dart';
-
-class Course {
-  String name;
-  String grade;
-  double credits;
-
-  Course({
-    required this.name,
-    required this.grade,
-    required this.credits,
-  });
-
-  Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'grade': grade,
-      'credits': credits,
-    };
-  }
-
-  factory Course.fromJson(Map<String, dynamic> json) {
-    return Course(
-      name: json['name'],
-      grade: json['grade'],
-      credits: json['credits'],
-    );
-  }
-}
 
 void main() {
   runApp(MyApp());
@@ -63,7 +35,10 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   int selectedGradeLevel = 9;
   List<double> credits = [5.0, 2.5];
   double selectedCredits = 5.0;
-  List<Course> courses = [];
+  List<Course_9> courses_9 = [];
+  List<Course_10> courses_10 = [];
+  List<Course_11> courses_11 = [];
+  List<Course_12> courses_12 = [];
   TextEditingController courseNameController = TextEditingController();
 
   @override
@@ -176,12 +151,12 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
             SizedBox(height: 8),
             Expanded(
               child: ListView.builder(
-                itemCount: courses.length,
+                itemCount: getCourseList(selectedGradeLevel).length,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    title: Text(courses[index].name),
+                    title: Text(getCourseList(selectedGradeLevel)[index].name),
                     subtitle: Text(
-                      'Grade: ${courses[index].grade}, Credits: ${courses[index].credits}',
+                      'Grade: ${getCourseList(selectedGradeLevel)[index].grade}, Credits: ${getCourseList(selectedGradeLevel)[index].credits}',
                     ),
                     trailing: IconButton(
                       icon: Icon(Icons.delete),
@@ -229,23 +204,72 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
 
   void addCourse() {
     String courseName = courseNameController.text;
-    if (courseName.isNotEmpty) {
-      Course course = Course(
-        name: courseName,
-        grade: selectedLetterGrade,
-        credits: selectedCredits,
-      );
-      setState(() {
-        courses.add(course);
-        courseNameController.text = '';
-      });
-      saveCourses(); // Save courses after adding a new course.
+    if (selectedGradeLevel == 9) {
+      if (courseName.isNotEmpty) {
+        Course_9 course = Course_9(
+          name: courseName,
+          grade: selectedLetterGrade,
+          credits: selectedCredits,
+        );
+        setState(() {
+          courses_9.add(course);
+          courseNameController.text = '';
+        });
+        saveCourses(); // Save courses after adding a new course.
+      }
+    } else if (selectedGradeLevel == 10) {
+      if (courseName.isNotEmpty) {
+        Course_10 course = Course_10(
+          name: courseName,
+          grade: selectedLetterGrade,
+          credits: selectedCredits,
+        );
+        setState(() {
+          courses_10.add(course);
+          courseNameController.text = '';
+        });
+        saveCourses(); // Save courses after adding a new course.
+      }
+    } else if (selectedGradeLevel == 11) {
+      if (courseName.isNotEmpty) {
+        Course_11 course = Course_11(
+          name: courseName,
+          grade: selectedLetterGrade,
+          credits: selectedCredits,
+        );
+        setState(() {
+          courses_11.add(course);
+          courseNameController.text = '';
+        });
+        saveCourses(); // Save courses after adding a new course.
+      }
+    } else {
+      if (courseName.isNotEmpty) {
+        Course_12 course = Course_12(
+          name: courseName,
+          grade: selectedLetterGrade,
+          credits: selectedCredits,
+        );
+        setState(() {
+          courses_12.add(course);
+          courseNameController.text = '';
+        });
+        saveCourses(); // Save courses after adding a new course.
+      }
     }
   }
 
   void removeCourse(int index) {
     setState(() {
-      courses.removeAt(index);
+      if (selectedGradeLevel == 9) {
+        courses_9.removeAt(index);
+      } else if (selectedGradeLevel == 10) {
+        courses_10.removeAt(index);
+      } else if (selectedGradeLevel == 11) {
+        courses_11.removeAt(index);
+      } else {
+        courses_12.removeAt(index);
+      }
       saveCourses(); // Save courses after removing a course.
     });
   }
@@ -253,18 +277,62 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   void saveCourses() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String> coursesJson =
-        courses.map((course) => jsonEncode(course.toJson())).toList();
-    prefs.setStringList('courses', coursesJson);
+        courses_9.map((course) => jsonEncode(course.toJson())).toList();
+    prefs.setStringList('courses_9', coursesJson);
+
+    coursesJson =
+        courses_10.map((course) => jsonEncode(course.toJson())).toList();
+    prefs.setStringList('courses_10', coursesJson);
+
+    coursesJson =
+        courses_11.map((course) => jsonEncode(course.toJson())).toList();
+    prefs.setStringList('courses_11', coursesJson);
+
+    coursesJson =
+        courses_12.map((course) => jsonEncode(course.toJson())).toList();
+    prefs.setStringList('courses_12', coursesJson);
   }
 
   void loadCourses() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String>? coursesJson = prefs.getStringList('courses');
+
+    List<String>? coursesJson = prefs.getStringList('courses_9');
     if (coursesJson != null) {
-      List<Course> loadedCourses =
-          coursesJson.map((json) => Course.fromJson(jsonDecode(json))).toList();
+      List<Course_9> loadedCourses = coursesJson
+          .map((json) => Course_9.fromJson(jsonDecode(json)))
+          .toList();
       setState(() {
-        courses = loadedCourses;
+        courses_9 = loadedCourses;
+      });
+    }
+
+    coursesJson = prefs.getStringList('courses_10');
+    if (coursesJson != null) {
+      List<Course_10> loadedCourses = coursesJson
+          .map((json) => Course_10.fromJson(jsonDecode(json)))
+          .toList();
+      setState(() {
+        courses_10 = loadedCourses;
+      });
+    }
+
+    coursesJson = prefs.getStringList('courses_11');
+    if (coursesJson != null) {
+      List<Course_11> loadedCourses = coursesJson
+          .map((json) => Course_11.fromJson(jsonDecode(json)))
+          .toList();
+      setState(() {
+        courses_11 = loadedCourses;
+      });
+    }
+
+    coursesJson = prefs.getStringList('courses_12');
+    if (coursesJson != null) {
+      List<Course_12> loadedCourses = coursesJson
+          .map((json) => Course_12.fromJson(jsonDecode(json)))
+          .toList();
+      setState(() {
+        courses_12 = loadedCourses;
       });
     }
   }
@@ -273,7 +341,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     double totalPoints = 0;
     double totalCredits = 0;
 
-    for (var course in courses) {
+    for (var course in getCourseList(gradeLevel)) {
       totalPoints += gradeToPoint(course.grade) * course.credits;
       totalCredits += course.credits;
     }
@@ -281,12 +349,13 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     return totalCredits != 0 ? totalPoints / totalCredits : 0.0;
   }
 
+  //might need fixing
   double calculateWeightedGPA() {
     double totalGPA = 0;
     int count = 0;
 
     for (int gradeLevel in gradeLevels) {
-      if (courses.isNotEmpty) {
+      if (getCourseList(gradeLevel).isNotEmpty) {
         double gpa = calculateGPA(gradeLevel);
         totalGPA += gpa;
         count++;
@@ -308,6 +377,21 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
         return 1.0;
       default:
         return 0.0;
+    }
+  }
+
+  List<dynamic> getCourseList(int selectedGradeLevel) {
+    switch (selectedGradeLevel) {
+      case 9:
+        return courses_9;
+      case 10:
+        return courses_10;
+      case 11:
+        return courses_11;
+      case 12:
+        return courses_12;
+      default:
+        return courses_9;
     }
   }
 }
