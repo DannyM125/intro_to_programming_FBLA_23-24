@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intro_to_programming_fbla/StatsPage.dart';
-import 'CoursePage.dart';
+import 'package:intro_to_programming_fbla/pages/stats/StatsPage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() {

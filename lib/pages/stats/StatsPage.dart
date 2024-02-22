@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intro_to_programming_fbla/CoursePage.dart';
-import 'package:intro_to_programming_fbla/WidgetUtils.dart';
+import 'package:intro_to_programming_fbla/Utils/WidgetUtils.dart';
 
 class StatisticsScreen extends StatelessWidget {
   @override

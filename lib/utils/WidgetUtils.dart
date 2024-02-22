@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:intro_to_programming_fbla/CoursePage.dart';
+import 'package:intro_to_programming_fbla/pages/course/CoursePage.dart';
 
 class RoundedGPABox extends StatelessWidget {
   @override
