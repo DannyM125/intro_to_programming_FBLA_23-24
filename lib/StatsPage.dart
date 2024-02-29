@@ -3,6 +3,11 @@ import 'package:intro_to_programming_fbla/CoursePage.dart';
 
 class StatisticsScreen extends StatelessWidget {
   @override
+
+  final CalculatorScreen calculatorScreen;
+
+  StatisticsScreen({required this.calculatorScreen});
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

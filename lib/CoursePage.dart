@@ -154,7 +154,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               Row(
                 children: [
                   Text(
-                    'GPA: ${calculateGPA(selectedGradeLevel).toStringAsFixed(2)}',
+                    'GPA: ${calculateGPA().toStringAsFixed(2)}',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -195,8 +195,9 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               children: [
                 TextField(
                   controller: courseNameController,
-                  decoration: InputDecoration(labelText: 'Course Name',
-                  labelStyle: TextStyle(fontSize: 25),
+                  decoration: InputDecoration(
+                    labelText: 'Course Name',
+                    labelStyle: TextStyle(fontSize: 25),
                   ),
                 ),
                 SizedBox(
@@ -244,8 +245,9 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                               .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
-                              child: Text(value,
-                              style: TextStyle(
+                              child: Text(
+                                value,
+                                style: TextStyle(
                                   fontSize: 20, // Font size
                                 ),
                               ),
@@ -270,8 +272,9 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                               .map<DropdownMenuItem<double>>((double value) {
                             return DropdownMenuItem<double>(
                               value: value,
-                              child: Text(value.toString(),
-                              style: TextStyle(
+                              child: Text(
+                                value.toString(),
+                                style: TextStyle(
                                   fontSize: 20, // Font size
                                 ),
                               ),
@@ -447,35 +450,54 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     }
   }
 
-  double calculateGPA(int gradeLevel) {
+  double calculateGPA() {
+    int count = 0;
+    double totalPoints = 0;
+    double totalCredits = 0;
+
+    for (int gradeLevel in gradeLevels) {
+      if (getCourseList(gradeLevel).isNotEmpty) {
+        for (var course in getCourseList(gradeLevel)) {
+          totalPoints += gradeToPointUW(course.grade) * course.credits;
+          totalCredits += course.credits;
+        }
+        count++;
+      }
+    }
+    return totalCredits != 0 ? totalPoints / totalCredits : 0.0;
+  }
+/*   double calculateGPA(int gradeLevel) {
     double totalPoints = 0;
     double totalCredits = 0;
 
     for (var course in getCourseList(gradeLevel)) {
-      totalPoints += gradeToPoint(course.grade) * course.credits;
+      totalPoints += gradeToPointUW(course.grade) * course.credits;
       totalCredits += course.credits;
     }
 
     return totalCredits != 0 ? totalPoints / totalCredits : 0.0;
-  }
+  } */
 
-  //might need fixing
+  //TODO this is identical to UW currently
+  //TODO CHANGE THIS TO ACCOUNT FOR DE and AP
   double calculateWeightedGPA() {
-    double totalGPA = 0;
     int count = 0;
+    double totalPoints = 0;
+    double totalCredits = 0;
 
     for (int gradeLevel in gradeLevels) {
       if (getCourseList(gradeLevel).isNotEmpty) {
-        double gpa = calculateGPA(gradeLevel);
-        totalGPA += gpa;
+        for (var course in getCourseList(gradeLevel)) {
+          totalPoints += gradeToPointUW(course.grade) * course.credits;
+          totalCredits += course.credits;
+        }
         count++;
       }
     }
-
-    return count > 0 ? totalGPA / count : 0.0;
+    return totalCredits != 0 ? totalPoints / totalCredits : 0.0;
   }
 
-  double gradeToPoint(String grade) {
+  double gradeToPointUW(String grade) {
     switch (grade) {
       case 'A':
         return 4.0;

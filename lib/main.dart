@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: StatisticsScreen(),
+      home: StatisticsScreen(calculatorScreen: CalculatorScreen()),
       debugShowCheckedModeBanner: false,
     );
   }
