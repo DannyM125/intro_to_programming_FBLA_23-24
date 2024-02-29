@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:intro_to_programming_fbla/Course.dart';
+import 'package:intro_to_programming_fbla/util/Course.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'main.dart';
@@ -150,12 +150,27 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                   );
                 },
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 10),
               Row(
                 children: [
-                  Text(
-                    'GPA: ${calculateGPA().toStringAsFixed(2)}',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  Row(
+                    children: [
+                      Text(
+                        "UW GPA",
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w800,
+                            color: Colors.blueGrey),
+                      ),
+                      SizedBox(width: 20),
+                      Text(
+                        '${calculateGPA().toStringAsFixed(2)}',
+                        style: GoogleFonts.montserrat(
+                          fontSize: 30, // Adjust font size as needed
+                          fontWeight: FontWeight.w700,
+                            color: Colors.blue),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -163,9 +178,20 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               Row(
                 children: [
                   Text(
-                    'Weighted GPA: ${calculateWeightedGPA().toStringAsFixed(2)}',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    'Weighted GPA:',
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.blueGrey),
                   ),
+                  SizedBox(width: 20),
+                      Text(
+                        '${calculateWeightedGPA().toStringAsFixed(2)}',
+                        style: GoogleFonts.montserrat(
+                          fontSize: 30, // Adjust font size as needed
+                          fontWeight: FontWeight.w700,
+                            color: Colors.blue),
+                      ),
                 ],
               ),
             ],
@@ -496,6 +522,8 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     }
     return totalCredits != 0 ? totalPoints / totalCredits : 0.0;
   }
+
+  double get weightedGPA => calculateWeightedGPA();
 
   double gradeToPointUW(String grade) {
     switch (grade) {

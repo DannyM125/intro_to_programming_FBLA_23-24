@@ -3,7 +3,6 @@ import 'package:intro_to_programming_fbla/CoursePage.dart';
 
 class StatisticsScreen extends StatelessWidget {
   @override
-
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -14,7 +13,6 @@ class StatisticsScreen extends StatelessWidget {
             fontWeight: FontWeight.bold, // Font weight (bold)
             fontStyle: FontStyle.italic, // Font style (italic)
             color: Colors.white, // Text color
-            
           ),
         ),
       ),
@@ -27,7 +25,9 @@ class StatisticsScreen extends StatelessWidget {
             RoundedWeightedGPABox(),
             SizedBox(height: 20), // Spacer between GPA boxes and button
             editCoursesButton(),
-            SizedBox(height: 200,)
+            SizedBox(
+              height: 200,
+            )
           ],
         ),
       ),
@@ -45,6 +45,10 @@ class RoundedGPABox extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.blue,
         borderRadius: BorderRadius.circular(60),
+        border: Border.all(
+          width: 4,
+          color: Colors.black,
+        ),
       ),
       child: const Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -82,6 +86,10 @@ class RoundedWeightedGPABox extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.blue,
         borderRadius: BorderRadius.circular(60),
+        border: Border.all(
+          width: 4,
+          color: Colors.black,
+        ),
       ),
       child: const Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -126,6 +134,7 @@ class editCoursesButton extends StatelessWidget {
             vertical: 15, horizontal: 50), // Button padding
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20), // Button border radius
+          side: BorderSide(width: 4, color: Colors.black), // Outline
         ),
       ),
       child: Text(
