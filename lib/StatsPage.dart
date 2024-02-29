@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intro_to_programming_fbla/CoursePage.dart';
+import 'util/AppColors.dart';
 
 class StatisticsScreen extends StatelessWidget {
   @override
@@ -43,11 +44,11 @@ class RoundedGPABox extends StatelessWidget {
       height: 150,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: Colors.blue,
+        color: AppColors.lightAccent,
         borderRadius: BorderRadius.circular(60),
         border: Border.all(
           width: 4,
-          color: Colors.black,
+          color: Colors.blue,
         ),
       ),
       child: const Column(
@@ -56,7 +57,7 @@ class RoundedGPABox extends StatelessWidget {
           Text(
             '???',
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontWeight: FontWeight.bold,
               fontSize: 50,
             ),
@@ -65,7 +66,7 @@ class RoundedGPABox extends StatelessWidget {
           Text(
             'Unweighted GPA',
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontWeight: FontWeight.bold,
               fontSize: 20,
             ),
@@ -84,7 +85,7 @@ class RoundedWeightedGPABox extends StatelessWidget {
       height: 150,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: Colors.blue,
+        color: AppColors.lightAccent,
         borderRadius: BorderRadius.circular(60),
         border: Border.all(
           width: 4,
@@ -97,7 +98,7 @@ class RoundedWeightedGPABox extends StatelessWidget {
           Text(
             '???',
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontWeight: FontWeight.bold,
               fontSize: 50,
             ),
@@ -106,7 +107,7 @@ class RoundedWeightedGPABox extends StatelessWidget {
           Text(
             'Weighted GPA',
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontWeight: FontWeight.bold,
               fontSize: 20,
             ),
