@@ -50,106 +50,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 30),
-              //9th grade courses:
-              Text(
-                'Courses for Grade 9:',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: getCourseList(9).length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(getCourseList(9)[index].name),
-                    subtitle: Text(
-                      'Grade: ${getCourseList(9)[index].grade}, Credits: ${getCourseList(9)[index].credits}',
-                    ),
-                    trailing: IconButton(
-                      icon: Icon(Icons.delete),
-                      color: Colors.red,
-                      onPressed: () {
-                        removeCourse(9, index);
-                      },
-                    ),
-                  );
-                },
-              ),
-              //10th grade courses:
-              Text(
-                'Courses for Grade 10:',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: getCourseList(10).length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(getCourseList(10)[index].name),
-                    subtitle: Text(
-                      'Grade: ${getCourseList(10)[index].grade}, Credits: ${getCourseList(10)[index].credits}',
-                    ),
-                    trailing: IconButton(
-                      icon: Icon(Icons.delete),
-                      color: Colors.red,
-                      onPressed: () {
-                        removeCourse(10, index);
-                      },
-                    ),
-                  );
-                },
-              ),
-              //11th grade courses:
-              Text(
-                'Courses for Grade 11:',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: getCourseList(11).length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(getCourseList(11)[index].name),
-                    subtitle: Text(
-                      'Grade: ${getCourseList(11)[index].grade}, Credits: ${getCourseList(11)[index].credits}',
-                    ),
-                    trailing: IconButton(
-                      icon: Icon(Icons.delete),
-                      color: Colors.red,
-                      onPressed: () {
-                        removeCourse(11, index);
-                      },
-                    ),
-                  );
-                },
-              ),
-              //12th grade courses:
-              Text(
-                'Courses for Grade 12:',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: getCourseList(12).length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(getCourseList(12)[index].name),
-                    subtitle: Text(
-                      'Grade: ${getCourseList(12)[index].grade}, Credits: ${getCourseList(12)[index].credits}',
-                    ),
-                    trailing: IconButton(
-                      icon: Icon(Icons.delete),
-                      color: Colors.red,
-                      onPressed: () {
-                        removeCourse(12, index);
-                      },
-                    ),
-                  );
-                },
-              ),
+              printCourses(), //Displaying all courses from each grade level
               SizedBox(height: 10),
               Row(
                 children: [
@@ -332,6 +233,44 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
         );
       },
     );
+  }
+
+  Widget printCourses() {
+    List<Widget> courseWidgets = [];
+    for (int gradeLevel in gradeLevels) {
+      courseWidgets.add(
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Courses for Grade $gradeLevel:',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: getCourseList(gradeLevel).length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(getCourseList(gradeLevel)[index].name),
+                  subtitle: Text(
+                    'Grade: ${getCourseList(gradeLevel)[index].grade}, Credits: ${getCourseList(gradeLevel)[index].credits}',
+                  ),
+                  trailing: IconButton(
+                    icon: Icon(Icons.delete),
+                    color: Colors.red,
+                    onPressed: () {
+                      removeCourse(gradeLevel, index);
+                    },
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      );
+    }
+    return Column(children: courseWidgets);
   }
 
   void addCourse() {
