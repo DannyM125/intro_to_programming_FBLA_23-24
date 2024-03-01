@@ -57,18 +57,18 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                   Row(
                     children: [
                       Text(
-                        "UW GPA",
+                        "UW GPA:",
                         style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w800,
                             color: Colors.blueGrey),
                       ),
-                      SizedBox(width: 20),
+                      SizedBox(width: 12),
                       Text(
                         '${calculateGPA().toStringAsFixed(2)}',
-                        style: GoogleFonts.montserrat(
-                          fontSize: 30, // Adjust font size as needed
-                          fontWeight: FontWeight.w700,
+                        style: GoogleFonts.poppins(
+                            fontSize: 25, // Adjust font size as needed
+                            fontWeight: FontWeight.w700,
                             color: Colors.blue),
                       ),
                     ],
@@ -85,14 +85,14 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                         fontWeight: FontWeight.w800,
                         color: Colors.blueGrey),
                   ),
-                  SizedBox(width: 20),
-                      Text(
-                        '${calculateWeightedGPA().toStringAsFixed(2)}',
-                        style: GoogleFonts.montserrat(
-                          fontSize: 30, // Adjust font size as needed
-                          fontWeight: FontWeight.w700,
-                            color: Colors.blue),
-                      ),
+                  SizedBox(width: 12),
+                  Text(
+                    '${calculateWeightedGPA().toStringAsFixed(2)}',
+                    style: GoogleFonts.poppins(
+                        fontSize: 25, // Adjust font size as needed
+                        fontWeight: FontWeight.w700,
+                        color: Colors.blue),
+                  ),
                 ],
               ),
             ],
@@ -220,14 +220,25 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: Text('Cancel',
+              style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,
+                    ),
+              ),
             ),
             ElevatedButton(
               onPressed: () {
                 addCourse();
                 Navigator.of(context).pop();
               },
-              child: Text('Add'),
+              child: Text('Add',
+              style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,
+                    ),),
             ),
           ],
         );
@@ -245,10 +256,10 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
             Text(
               'Courses for Grade $gradeLevel:',
               style: GoogleFonts.poppins(
-            fontSize: 23,
-            fontWeight: FontWeight.w600,
-            color: Colors.black,
-          ),
+                fontSize: 23,
+                fontWeight: FontWeight.w600,
+                color: Colors.blueGrey,
+              ),
             ),
             ListView.builder(
               shrinkWrap: true,
@@ -257,11 +268,18 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               itemBuilder: (context, index) {
                 return ListTile(
                   title: Text(getCourseList(gradeLevel)[index].name,
-                  style: TextStyle(fontSize: 20,)
-                  ),
+                      style: GoogleFonts.poppins(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                    ),),
                   subtitle: Text(
                     'Grade: ${getCourseList(gradeLevel)[index].grade}, Credits: ${getCourseList(gradeLevel)[index].credits}',
-                  style: TextStyle(fontSize: 16,)
+                    style: GoogleFonts.poppins(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black54,
+                    ),
                   ),
                   trailing: IconButton(
                     icon: Icon(Icons.delete),

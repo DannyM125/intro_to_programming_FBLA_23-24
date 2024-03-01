@@ -20,21 +20,29 @@ class StatisticsScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: Center(
+      body: SingleChildScrollView(
+        child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            SizedBox(height: 100), // Spacer between the boxes and the app bar
             RoundedGPABox(),
             SizedBox(height: 30), // Spacer between the two boxes
             RoundedWeightedGPABox(),
             SizedBox(height: 20), // Spacer between GPA boxes and button
             editCoursesButton(),
-            SizedBox(
-              height: 200,
-            )
+            SizedBox(height: 20),
+            Text('What is GPA?',
+            style: TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.w600,
+            ),            
+            ),
+
           ],
         ),
       ),
+    ),
     );
   }
 }
