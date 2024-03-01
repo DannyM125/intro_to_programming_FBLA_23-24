@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intro_to_programming_fbla/CoursePage.dart';
+import 'CoursePage.dart';
 import 'util/AppColors.dart';
 
 class StatisticsScreen extends StatelessWidget {
   @override
+  CalculatorScreen calculatorScreen = new CalculatorScreen();
+  
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

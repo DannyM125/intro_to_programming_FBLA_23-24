@@ -11,7 +11,7 @@ class CalculatorScreen extends StatefulWidget {
 }
 
 class _CalculatorScreenState extends State<CalculatorScreen> {
-  List<String> letterGrades = ['A', 'B', 'C', 'D', 'F'];
+  List<String> letterGrades = ['A', 'B+', 'B', 'C+', 'C', 'D', 'F'];
   String selectedLetterGrade = 'A';
   List<int> gradeLevels = [9, 10, 11, 12];
   int selectedGradeLevel = 9;
@@ -244,7 +244,11 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
           children: [
             Text(
               'Courses for Grade $gradeLevel:',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: GoogleFonts.poppins(
+            fontSize: 23,
+            fontWeight: FontWeight.w600,
+            color: Colors.black,
+          ),
             ),
             ListView.builder(
               shrinkWrap: true,
@@ -252,9 +256,12 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               itemCount: getCourseList(gradeLevel).length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text(getCourseList(gradeLevel)[index].name),
+                  title: Text(getCourseList(gradeLevel)[index].name,
+                  style: TextStyle(fontSize: 20,)
+                  ),
                   subtitle: Text(
                     'Grade: ${getCourseList(gradeLevel)[index].grade}, Credits: ${getCourseList(gradeLevel)[index].credits}',
+                  style: TextStyle(fontSize: 16,)
                   ),
                   trailing: IconButton(
                     icon: Icon(Icons.delete),
@@ -468,8 +475,12 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     switch (grade) {
       case 'A':
         return 4.0;
+      case 'B+':
+        return 3.5;
       case 'B':
         return 3.0;
+      case 'C+':
+        return 2.5;
       case 'C':
         return 2.0;
       case 'D':
