@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:intro_to_programming_fbla/util/AppColors.dart';
 import 'package:intro_to_programming_fbla/util/Course.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -34,6 +35,9 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: AppColors.primary,
+        shadowColor: Colors.black,
+        elevation: 4.0,
         title: Text(
           'Update Courses',
           style: GoogleFonts.poppins(
@@ -42,10 +46,11 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               color: Colors.white),
         ),
         leading: IconButton(
-          icon:
-              Icon(Icons.arrow_back,
-              size: 35,
-              ), // Use arrow_back icon for back navigation
+          icon: Icon(
+            Icons.arrow_back,
+            size: 35,
+            color: Colors.white,
+          ), // Use arrow_back icon for back navigation
           onPressed: () {
             Navigator.pop(context); // Go back to the previous screen
           },
@@ -77,7 +82,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                         style: GoogleFonts.poppins(
                             fontSize: 25, // Adjust font size as needed
                             fontWeight: FontWeight.w700,
-                            color: Colors.blue),
+                            color: AppColors.primary),
                       ),
                     ],
                   ),
@@ -99,21 +104,25 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                     style: GoogleFonts.poppins(
                         fontSize: 25, // Adjust font size as needed
                         fontWeight: FontWeight.w700,
-                        color: Colors.blue),
+                        color: AppColors.primary),
                   ),
                 ],
               ),
               SizedBox(height: 50)
             ],
-            
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColors.primary,
         onPressed: () {
           _showAddCourseDialog();
         },
-        child: Icon(Icons.add),
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+          size: 35,
+        ),
       ),
     );
   }
@@ -252,6 +261,9 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                 addCourse();
                 Navigator.of(context).pop();
               },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+              ),
               child: Text(
                 'Add',
                 style: TextStyle(
@@ -326,7 +338,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                       },
                     ),
                     SizedBox(
-                      width: 30,
+                      width: 15,
                     ),
                     StatefulBuilder(
                       builder: (BuildContext context, StateSetter setState) {
@@ -353,7 +365,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                       },
                     ),
                     SizedBox(
-                      width: 30,
+                      width: 15,
                     ),
                     StatefulBuilder(
                       builder: (BuildContext context, StateSetter setState) {
@@ -403,6 +415,9 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                 updateCourse(gradeLevel, index);
                 Navigator.of(context).pop();
               },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+              ),
               child: Text(
                 'Update',
                 style: TextStyle(
@@ -498,67 +513,63 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     });
   }
 
-void updateCourse(int oldGradeLevel, int index) {
-  String courseName = courseNameController.text;
-  if (courseName.isNotEmpty) {
-    setState(() {
-      switch (oldGradeLevel) {
-        case 9:
-          var course = courses_9.removeAt(index);
-          break;
-        case 10:
-          var course = courses_10.removeAt(index);
-          break;
-        case 11:
-          var course = courses_11.removeAt(index);
-          break;
-        case 12:
-          var course = courses_12.removeAt(index);
-          break;
-        default:
-          break;
-      }
+  void updateCourse(int oldGradeLevel, int index) {
+    String courseName = courseNameController.text;
+    if (courseName.isNotEmpty) {
+      setState(() {
+        switch (oldGradeLevel) {
+          case 9:
+            var course = courses_9.removeAt(index);
+            break;
+          case 10:
+            var course = courses_10.removeAt(index);
+            break;
+          case 11:
+            var course = courses_11.removeAt(index);
+            break;
+          case 12:
+            var course = courses_12.removeAt(index);
+            break;
+          default:
+            break;
+        }
 
-      switch (selectedGradeLevel) {
-        case 9:
-          courses_9.add(Course_9(
-            name: courseName,
-            grade: selectedLetterGrade,
-            credits: selectedCredits,
-          ));
-          break;
-        case 10:
-          courses_10.add(Course_10(
-            name: courseName,
-            grade: selectedLetterGrade,
-            credits: selectedCredits,
-          ));
-          break;
-        case 11:
-          courses_11.add(Course_11(
-            name: courseName,
-            grade: selectedLetterGrade,
-            credits: selectedCredits,
-          ));
-          break;
-        case 12:
-          courses_12.add(Course_12(
-            name: courseName,
-            grade: selectedLetterGrade,
-            credits: selectedCredits,
-          ));
-          break;
-        default:
-          break;
-      }
-    });
-    saveCourses();
+        switch (selectedGradeLevel) {
+          case 9:
+            courses_9.add(Course_9(
+              name: courseName,
+              grade: selectedLetterGrade,
+              credits: selectedCredits,
+            ));
+            break;
+          case 10:
+            courses_10.add(Course_10(
+              name: courseName,
+              grade: selectedLetterGrade,
+              credits: selectedCredits,
+            ));
+            break;
+          case 11:
+            courses_11.add(Course_11(
+              name: courseName,
+              grade: selectedLetterGrade,
+              credits: selectedCredits,
+            ));
+            break;
+          case 12:
+            courses_12.add(Course_12(
+              name: courseName,
+              grade: selectedLetterGrade,
+              credits: selectedCredits,
+            ));
+            break;
+          default:
+            break;
+        }
+      });
+      saveCourses();
+    }
   }
-}
-
-
-
-
 
   void saveCourses() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -669,7 +680,7 @@ void updateCourse(int oldGradeLevel, int index) {
                           Icons.edit,
                           size: 30.0,
                         ),
-                        color: Colors.blue,
+                        color: AppColors.primary,
                         onPressed: () {
                           _showEditCourseDialog(course, gradeLevel, index);
                         },
@@ -679,7 +690,7 @@ void updateCourse(int oldGradeLevel, int index) {
                           Icons.delete,
                           size: 30.0,
                         ),
-                        color: Colors.red,
+                        color: Colors.deepOrange,
                         onPressed: () {
                           removeCourse(gradeLevel, index);
                         },

@@ -6,10 +6,13 @@ import 'util/AppColors.dart';
 class StatisticsScreen extends StatelessWidget {
   @override
   CalculatorScreen calculatorScreen = new CalculatorScreen();
-  
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: AppColors.primary,
+        shadowColor: Colors.black,
+        elevation: 4.0,
         title: Text(
           'Your Profile',
           style: TextStyle(
@@ -22,27 +25,27 @@ class StatisticsScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(height: 100), // Spacer between the boxes and the app bar
-            RoundedGPABox(),
-            SizedBox(height: 30), // Spacer between the two boxes
-            RoundedWeightedGPABox(),
-            SizedBox(height: 20), // Spacer between GPA boxes and button
-            editCoursesButton(),
-            SizedBox(height: 20),
-            Text('What is GPA?',
-            style: TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.w600,
-            ),            
-            ),
-
-          ],
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(height: 100), // Spacer between the boxes and the app bar
+              RoundedGPABox(),
+              SizedBox(height: 30), // Spacer between the two boxes
+              RoundedWeightedGPABox(),
+              SizedBox(height: 20), // Spacer between GPA boxes and button
+              editCoursesButton(),
+              SizedBox(height: 20),
+              Text(
+                'What is GPA?',
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
-    ),
     );
   }
 }
@@ -55,13 +58,20 @@ class RoundedGPABox extends StatelessWidget {
       height: 150,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: AppColors.lightAccent,
-        borderRadius: BorderRadius.circular(60),
-        border: Border.all(
-          width: 4,
-          color: Colors.blue,
-        ),
-      ),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(60),
+          border: Border.all(
+            width: 6,
+            color: AppColors.primary,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 3,
+              blurRadius: 7,
+              offset: Offset(0, 3), // changes position of shadow
+            ),
+          ]),
       child: const Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -96,13 +106,20 @@ class RoundedWeightedGPABox extends StatelessWidget {
       height: 150,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: AppColors.lightAccent,
-        borderRadius: BorderRadius.circular(60),
-        border: Border.all(
-          width: 4,
-          color: Colors.black,
-        ),
-      ),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(60),
+          border: Border.all(
+            width: 6,
+            color: AppColors.primary,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 3,
+              blurRadius: 7,
+              offset: Offset(0, 3), // changes position of shadow
+            ),
+          ]),
       child: const Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -140,14 +157,13 @@ class editCoursesButton extends StatelessWidget {
         );
       },
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.blue, // Background color
-        foregroundColor: Colors.white, // Text color
+        backgroundColor: AppColors.primary, // Background color
+        foregroundColor: Colors.black, // Text color
+        shadowColor: Colors.black,
+        elevation: 4.0,
         padding: EdgeInsets.symmetric(
             vertical: 15, horizontal: 50), // Button padding
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20), // Button border radius
-          side: BorderSide(width: 4, color: Colors.black), // Outline
-        ),
+
       ),
       child: Text(
         'Edit Courses',

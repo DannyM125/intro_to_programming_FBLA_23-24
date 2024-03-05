@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intro_to_programming_fbla/StatsPage.dart';
+import 'package:intro_to_programming_fbla/util/AppColors.dart';
 import 'CoursePage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -13,7 +14,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: StatisticsScreen(),
