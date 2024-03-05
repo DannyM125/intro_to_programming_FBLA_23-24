@@ -175,7 +175,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                       },
                     ),
                     SizedBox(
-                      width: 30,
+                      width: 15,
                     ),
                     StatefulBuilder(
                       builder: (BuildContext context, StateSetter setState) {
@@ -202,7 +202,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                       },
                     ),
                     SizedBox(
-                      width: 30,
+                      width: 15,
                     ),
                     StatefulBuilder(
                       builder: (BuildContext context, StateSetter setState) {
