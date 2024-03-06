@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intro_to_programming_fbla/CoursePage.dart';
 import 'CoursePage.dart';
 import 'util/AppColors.dart';
@@ -10,6 +11,10 @@ class StatisticsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.white, // Set the color of the icon to white
+          size: 30, // Set the size of the icon
+        ),
         backgroundColor: AppColors.primary,
         shadowColor: Colors.black,
         elevation: 4.0,
@@ -21,6 +26,84 @@ class StatisticsScreen extends StatelessWidget {
             fontStyle: FontStyle.italic, // Font style (italic)
             color: Colors.white, // Text color
           ),
+        ),
+      ),
+      drawer: Drawer(
+        backgroundColor: AppColors.primary,
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            SizedBox(
+              height: 150,
+              child: DrawerHeader(
+                decoration: BoxDecoration(
+                  color: AppColors.primary,
+                ),
+                child: Text(
+                  'Settings',
+                  style: GoogleFonts.poppins(
+                    fontSize: 35,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.share,
+                color: Colors.white, // Set the color of the icon to white
+                size: 25, // Set the size of the icon
+              ),
+              title: Text(
+                'Share',
+                style: GoogleFonts.poppins(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
+                ),
+              ),
+              onTap: () {
+                // Add your share functionality here
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.color_lens,
+                color: Colors.white, // Set the color of the icon to white
+                size: 25, // Set the size of the icon
+              ),
+              title: Text(
+                'Color Scheme',
+                style: GoogleFonts.poppins(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
+                ),
+              ),
+              onTap: () {
+                // Add your color scheme functionality here
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.language,
+                color: Colors.white, // Set the color of the icon to white
+                size: 25, // Set the size of the icon
+              ),
+              title: Text(
+                'Language',
+                style: GoogleFonts.poppins(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
+                ),
+              ),
+              onTap: () {
+                // Add your language selection functionality here
+              },
+            ),
+          ],
         ),
       ),
       body: SingleChildScrollView(
@@ -163,7 +246,6 @@ class editCoursesButton extends StatelessWidget {
         elevation: 4.0,
         padding: EdgeInsets.symmetric(
             vertical: 15, horizontal: 50), // Button padding
-
       ),
       child: Text(
         'Edit Courses',
@@ -173,6 +255,46 @@ class editCoursesButton extends StatelessWidget {
           fontSize: 20,
         ),
       ),
+    );
+  }
+}
+
+class colorSchemeDialog {
+  static void show(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Select Color Scheme'),
+          content: DropdownButtonFormField<String>(
+            value: 'Blue', // Default value
+            items: <String>['Blue', 'Red', 'Green', 'Yellow'] // List of colors
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            onChanged: (String? newValue) {
+              // Handle color scheme selection here
+            },
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                // Implement logic for applying selected color scheme
+              },
+              child: Text('Apply'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

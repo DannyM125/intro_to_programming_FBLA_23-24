@@ -9,6 +9,7 @@ import 'main.dart';
 class CalculatorScreen extends StatefulWidget {
   @override
   _CalculatorScreenState createState() => _CalculatorScreenState();
+  
 }
 
 class _CalculatorScreenState extends State<CalculatorScreen> {
@@ -140,7 +141,14 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Add Course'),
+          title: Text('Add Course:',
+          style: GoogleFonts.poppins(
+                fontSize: 25,
+                fontWeight: FontWeight.w400,
+                color: Colors.black,
+              ),
+          ),
+          backgroundColor: Colors.white,
           content: Container(
             width: 320,
             height: 150,
@@ -151,7 +159,11 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                   controller: courseNameController,
                   decoration: InputDecoration(
                     labelText: 'Course Name',
-                    labelStyle: TextStyle(fontSize: 25),
+                    labelStyle: GoogleFonts.poppins(
+                fontSize: 23,
+                fontWeight: FontWeight.w400,
+                color: Colors.black,
+              ),
                   ),
                 ),
                 SizedBox(
@@ -723,7 +735,6 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   }
 
 //GPA calculation methods:
-  double get weightedGPA => calculateWeightedGPA();
 
   double calculateGPA() {
     int count = 0;
