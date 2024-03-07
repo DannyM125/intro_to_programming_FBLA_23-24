@@ -121,29 +121,128 @@ class StatisticsScreen extends StatelessWidget {
               RoundedWeightedGPABox(),
               SizedBox(height: 20), // Spacer between GPA boxes and button
               editCoursesButton(),
-              SizedBox(height: 20),
+              SizedBox(height: 40),
+              Divider(color: colorProvider.primaryColor, thickness: 5, indent: 20, endIndent: 20,), // Divider with the primary color
+              SizedBox(height: 20), 
+              //WHAT IS GPA EXPLAINATION:
               FutureBuilder<String>(
                 future: translator
                     .translate('What is GPA?',
                         to: languageProvider.selectedLanguage)
-                    .then((value) => value.toString()),
+                    .then((Translation value) => value.text),
                 builder:
                     (BuildContext context, AsyncSnapshot<String> snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return CircularProgressIndicator();
                   } else if (snapshot.connectionState == ConnectionState.done) {
-                    return Text(
-                      snapshot.data!,
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.w600,
-                      ),
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(
+                          child: Text(
+                            snapshot.data!,
+                            style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                            height: 30), // Spacer between text and explanation
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(25, 0, 15, 0),
+                          child: FutureBuilder<Translation>(
+                            future: translator.translate(
+                              'GPA, or Grade Point Average, is a numerical representation of a student\'s academic performance. A students wieghted GPA factors in the level of classes they are taking, such as Dual Enrollment, Advance Placement, Honors, and Acedemic.',
+                              to: languageProvider.selectedLanguage,
+                            ),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<Translation>
+                                    explanationSnapshot) {
+                              if (explanationSnapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return CircularProgressIndicator();
+                              } else if (explanationSnapshot.connectionState ==
+                                  ConnectionState.done) {
+                                List<String> bulletPoints = [
+                                  'GPA is a numerical representation of academic performance.',
+                                  'It is measured on a scale of 0 to 4.0 at our school.',
+                                  'Higher values indicate better performance.',
+                                  'Colleges and universities use GPA during admissions.',
+                                  'Students should use GPA to track progress and set goals.',
+                                ];
+                                List<Widget> translatedBulletPoints =
+                                    bulletPoints.map((bullet) {
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 15),
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.check_circle,
+                                            color: colorProvider.primaryColor),
+                                        SizedBox(width: 8),
+                                        Expanded(
+                                          child: FutureBuilder<Translation>(
+                                            future: translator.translate(
+                                              bullet,
+                                              to: languageProvider
+                                                  .selectedLanguage,
+                                            ),
+                                            builder: (BuildContext context,
+                                                AsyncSnapshot<Translation>
+                                                    bulletSnapshot) {
+                                              if (bulletSnapshot
+                                                      .connectionState ==
+                                                  ConnectionState.waiting) {
+                                                return CircularProgressIndicator();
+                                              } else if (bulletSnapshot
+                                                      .connectionState ==
+                                                  ConnectionState.done) {
+                                                return Text(
+                                                  bulletSnapshot.data!.text,
+                                                  style:
+                                                      TextStyle(fontSize: 16),
+                                                );
+                                              } else {
+                                                return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }).toList();
+
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      explanationSnapshot.data!.text,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                        height:
+                                            20), // Spacer between explanation and bullet points
+                                    ...translatedBulletPoints, // Spread the list of translated bullet points
+                                  ],
+                                );
+                              } else {
+                                return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+                              }
+                            },
+                          ),
+                        ),
+                      ],
                     );
                   } else {
                     return SizedBox(); // Return an empty widget if the future hasn't resolved yet
                   }
                 },
               ),
+              SizedBox(height: 50,)
             ],
           ),
         ),
@@ -448,7 +547,8 @@ void _showLanguageDialog(
           ] // Add your language options here
               .map<DropdownMenuItem<String>>((String value) {
             var language = value.substring(0, value.indexOf(' ('));
-            var code = value.substring(value.indexOf('(') + 1, value.indexOf(')'));
+            var code =
+                value.substring(value.indexOf('(') + 1, value.indexOf(')'));
             return DropdownMenuItem<String>(
               value: code,
               child: Text('$language ($code)'),
@@ -479,7 +579,6 @@ void _showLanguageDialog(
     },
   );
 }
-
 
 class LanguageProvider with ChangeNotifier {
   String _selectedLanguage = 'en'; // Default language
