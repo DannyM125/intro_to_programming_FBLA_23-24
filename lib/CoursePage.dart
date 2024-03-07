@@ -25,6 +25,8 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   List<Course_12> courses_12 = [];
   TextEditingController courseNameController = TextEditingController();
 
+  double get gpa => calculateGPA();
+
   @override
   void initState() {
     super.initState();
@@ -141,12 +143,13 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Add Course:',
-          style: GoogleFonts.poppins(
-                fontSize: 25,
-                fontWeight: FontWeight.w400,
-                color: Colors.black,
-              ),
+          title: Text(
+            'Add Course:',
+            style: GoogleFonts.poppins(
+              fontSize: 25,
+              fontWeight: FontWeight.w400,
+              color: Colors.black,
+            ),
           ),
           backgroundColor: Colors.white,
           content: Container(
@@ -160,10 +163,10 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                   decoration: InputDecoration(
                     labelText: 'Course Name',
                     labelStyle: GoogleFonts.poppins(
-                fontSize: 23,
-                fontWeight: FontWeight.w400,
-                color: Colors.black,
-              ),
+                      fontSize: 23,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -750,6 +753,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
         count++;
       }
     }
+
     return totalCredits != 0 ? totalPoints / totalCredits : 0.0;
   }
 

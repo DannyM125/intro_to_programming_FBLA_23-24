@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intro_to_programming_fbla/CoursePage.dart';
+import 'package:translator/translator.dart';
 import 'CoursePage.dart';
 import 'util/AppColors.dart';
+import 'package:provider/provider.dart';
 
 class StatisticsScreen extends StatelessWidget {
   @override
-  CalculatorScreen calculatorScreen = new CalculatorScreen();
-
   Widget build(BuildContext context) {
+    final languageProvider = Provider.of<LanguageProvider>(context);
+    final translator = GoogleTranslator();
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
@@ -82,7 +85,7 @@ class StatisticsScreen extends StatelessWidget {
                 ),
               ),
               onTap: () {
-                // Add your color scheme functionality here
+                showColorSchemeDialog(context);
               },
             ),
             ListTile(
@@ -100,7 +103,7 @@ class StatisticsScreen extends StatelessWidget {
                 ),
               ),
               onTap: () {
-                // Add your language selection functionality here
+                _showLanguageDialog(context, languageProvider);
               },
             ),
           ],
@@ -118,12 +121,27 @@ class StatisticsScreen extends StatelessWidget {
               SizedBox(height: 20), // Spacer between GPA boxes and button
               editCoursesButton(),
               SizedBox(height: 20),
-              Text(
-                'What is GPA?',
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w600,
-                ),
+              FutureBuilder<String>(
+                future: translator
+                    .translate('What is GPA?',
+                        to: languageProvider.selectedLanguage)
+                    .then((value) => value.toString()),
+                builder:
+                    (BuildContext context, AsyncSnapshot<String> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.connectionState == ConnectionState.done) {
+                    return Text(
+                      snapshot.data!,
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    );
+                  } else {
+                    return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+                  }
+                },
               ),
             ],
           ),
@@ -136,47 +154,64 @@ class StatisticsScreen extends StatelessWidget {
 class RoundedGPABox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 300,
-      height: 150,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(60),
-          border: Border.all(
-            width: 6,
-            color: AppColors.primary,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 3,
-              blurRadius: 7,
-              offset: Offset(0, 3), // changes position of shadow
+    final languageProvider = Provider.of<LanguageProvider>(context);
+    final translator = GoogleTranslator();
+
+    return FutureBuilder<String>(
+      future: translator
+          .translate('Unweighted GPA', to: languageProvider.selectedLanguage)
+          .then((value) => value.toString()),
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else if (snapshot.connectionState == ConnectionState.done) {
+          return Container(
+            width: 300,
+            height: 150,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(60),
+              border: Border.all(
+                width: 6,
+                color: AppColors.primary,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 3,
+                  blurRadius: 7,
+                  offset: Offset(0, 3), // changes position of shadow
+                ),
+              ],
             ),
-          ]),
-      child: const Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            '???',
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontSize: 50,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '???',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 50,
+                  ),
+                ),
+                SizedBox(height: 10), // Spacer between "???" and "Weighted GPA"
+                Text(
+                  snapshot.data!,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+              ],
             ),
-          ),
-          SizedBox(height: 10), // Spacer between "???" and "Weighted GPA"
-          Text(
-            'Unweighted GPA',
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
-          ),
-        ],
-      ),
+          );
+        } else {
+          return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+        }
+      },
     );
   }
 }
@@ -184,47 +219,64 @@ class RoundedGPABox extends StatelessWidget {
 class RoundedWeightedGPABox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 300,
-      height: 150,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(60),
-          border: Border.all(
-            width: 6,
-            color: AppColors.primary,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 3,
-              blurRadius: 7,
-              offset: Offset(0, 3), // changes position of shadow
+    final languageProvider = Provider.of<LanguageProvider>(context);
+    final translator = GoogleTranslator();
+
+    return FutureBuilder<String>(
+      future: translator
+          .translate('Weighted GPA', to: languageProvider.selectedLanguage)
+          .then((value) => value.toString()),
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else if (snapshot.connectionState == ConnectionState.done) {
+          return Container(
+            width: 300,
+            height: 150,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(60),
+              border: Border.all(
+                width: 6,
+                color: AppColors.primary,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 3,
+                  blurRadius: 7,
+                  offset: Offset(0, 3), // changes position of shadow
+                ),
+              ],
             ),
-          ]),
-      child: const Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            '???',
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontSize: 50,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '???',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 50,
+                  ),
+                ),
+                SizedBox(height: 10), // Spacer between "???" and "Weighted GPA"
+                Text(
+                  snapshot.data!,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+              ],
             ),
-          ),
-          SizedBox(height: 10), // Spacer between "???" and "Weighted GPA"
-          Text(
-            'Weighted GPA',
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
-          ),
-        ],
-      ),
+          );
+        } else {
+          return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+        }
+      },
     );
   }
 }
@@ -232,6 +284,9 @@ class RoundedWeightedGPABox extends StatelessWidget {
 class editCoursesButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final languageProvider = Provider.of<LanguageProvider>(context);
+    final translator = GoogleTranslator();
+
     return ElevatedButton(
       onPressed: () {
         Navigator.push(
@@ -247,54 +302,275 @@ class editCoursesButton extends StatelessWidget {
         padding: EdgeInsets.symmetric(
             vertical: 15, horizontal: 50), // Button padding
       ),
-      child: Text(
-        'Edit Courses',
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
-        ),
+      child: FutureBuilder<String>(
+        future: translator
+            .translate('Edit Courses', to: languageProvider.selectedLanguage)
+            .then((value) => value.toString()),
+        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          } else if (snapshot.connectionState == ConnectionState.done) {
+            return Text(
+              snapshot.data!,
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
+            );
+          } else {
+            return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+          }
+        },
       ),
     );
   }
 }
 
-class colorSchemeDialog {
-  static void show(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Select Color Scheme'),
-          content: DropdownButtonFormField<String>(
-            value: 'Blue', // Default value
-            items: <String>['Blue', 'Red', 'Green', 'Yellow'] // List of colors
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            onChanged: (String? newValue) {
-              // Handle color scheme selection here
-            },
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                // Implement logic for applying selected color scheme
-              },
-              child: Text('Apply'),
-            ),
-          ],
-        );
-      },
+void showColorSchemeDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return colorSchemeDialog(); // Instantiate and return the dialog widget
+    },
+  );
+}
+
+class colorSchemeDialog extends StatefulWidget {
+  @override
+  _ColorSchemeDialogState createState() => _ColorSchemeDialogState();
+}
+
+class _ColorSchemeDialogState extends State<colorSchemeDialog> {
+  late String _selectedColor = 'Blue'; // Variable to hold the selected color
+
+  Color _getColorFromString(String colorString) {
+    switch (colorString) {
+      case 'Blue':
+        return Colors.blue;
+      case 'Red':
+        return Colors.red;
+      case 'Green':
+        return Colors.green;
+      case 'Yellow':
+        return Colors.yellow;
+      default:
+        return Colors.blue; // Default color
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('Select Color Scheme'),
+      content: DropdownButtonFormField<String>(
+        value: _selectedColor, // Default value
+        items: <String>['Blue', 'Red', 'Green', 'Yellow'] // List of colors
+            .map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+        onChanged: (String? newValue) {
+          if (newValue != null) {
+            setState(() {
+              _selectedColor = newValue; // Update selected color
+            });
+          }
+        },
+      ),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () {
+            final selectedColor = _getColorFromString(_selectedColor);
+            AppColors.updatePrimaryColor(selectedColor);
+            Navigator.of(context).pop();
+          },
+          child: Text('Apply'),
+        ),
+      ],
     );
+  }
+}
+
+
+void _showLanguageDialog(
+    BuildContext context, LanguageProvider languageProvider) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Select Language'),
+        content: DropdownButtonFormField<String>(
+          value: languageProvider.selectedLanguage,
+          items: <String>[
+            "af",
+            "sq",
+            "ar-sa",
+            "ar-iq",
+            "ar-eg",
+            "ar-ly",
+            "ar-dz",
+            "ar-ma",
+            "ar-tn",
+            "ar-om",
+            "ar-ye",
+            "ar-sy",
+            "ar-jo",
+            "ar-lb",
+            "ar-kw",
+            "ar-ae",
+            "ar-bh",
+            "ar-qa",
+            "eu",
+            "bg",
+            "be",
+            "ca",
+            "zh-tw",
+            "zh-cn",
+            "zh-hk",
+            "zh-sg",
+            "hr",
+            "cs",
+            "da",
+            "nl",
+            "nl-be",
+            "en",
+            "en-us",
+            "en-gb",
+            "en-au",
+            "en-ca",
+            "en-nz",
+            "en-ie",
+            "en-za",
+            "en-jm",
+            "en-bz",
+            "en-tt",
+            "et",
+            "fo",
+            "fa",
+            "fi",
+            "fr",
+            "fr-be",
+            "fr-ca",
+            "fr-ch",
+            "fr-lu",
+            "gd",
+            "ga",
+            "de",
+            "de-ch",
+            "de-at",
+            "de-lu",
+            "de-li",
+            "el",
+            "he",
+            "hi",
+            "hu",
+            "is",
+            "id",
+            "it",
+            "it-ch",
+            "ja",
+            "ko",
+            "lv",
+            "lt",
+            "mk",
+            "ms",
+            "mt",
+            "no",
+            "pl",
+            "pt-br",
+            "pt",
+            "rm",
+            "ro",
+            "ro-mo",
+            "ru",
+            "ru-mo",
+            "sz",
+            "sr",
+            "sk",
+            "sl",
+            "sb",
+            "es",
+            "es-mx",
+            "es-gt",
+            "es-cr",
+            "es-pa",
+            "es-do",
+            "es-ve",
+            "es-co",
+            "es-pe",
+            "es-ar",
+            "es-ec",
+            "es-cl",
+            "es-uy",
+            "es-py",
+            "es-bo",
+            "es-sv",
+            "es-hn",
+            "es-ni",
+            "es-pr",
+            "sx",
+            "sv",
+            "sv-fi",
+            "th",
+            "ts",
+            "tn",
+            "tr",
+            "uk",
+            "ur",
+            "ve",
+            "vi",
+            "xh",
+            "ji",
+            "zu"
+          ] // Add your language options here
+              .map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+          onChanged: (String? newValue) {
+            if (newValue != null) {
+              languageProvider.setLanguage(newValue);
+            }
+          },
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              // Implement logic for applying the selected language
+            },
+            child: Text('Apply'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+class LanguageProvider with ChangeNotifier {
+  String _selectedLanguage = 'en'; // Default language
+
+  String get selectedLanguage => _selectedLanguage;
+
+  void setLanguage(String language) {
+    _selectedLanguage = language;
+    notifyListeners();
   }
 }
