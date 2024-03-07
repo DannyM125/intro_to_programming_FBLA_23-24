@@ -22,14 +22,27 @@ class StatisticsScreen extends StatelessWidget {
         backgroundColor: colorProvider.primaryColor,
         shadowColor: Colors.black,
         elevation: 4.0,
-        title: Text(
-          'Your Profile',
-          style: TextStyle(
-            fontSize: 35, // Font size
-            fontWeight: FontWeight.bold, // Font weight (bold)
-            fontStyle: FontStyle.italic, // Font style (italic)
-            color: Colors.white, // Text color
-          ),
+        title: FutureBuilder<String>(
+          future: translator
+              .translate('Your Profile', to: languageProvider.selectedLanguage)
+              .then((Translation value) => value.text),
+          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator();
+            } else if (snapshot.connectionState == ConnectionState.done) {
+              return Text(
+                snapshot.data!,
+                style: TextStyle(
+                  fontSize: 35, // Font size
+                  fontWeight: FontWeight.bold, // Font weight (bold)
+                  fontStyle: FontStyle.italic, // Font style (italic)
+                  color: Colors.white, // Text color
+                ),
+              );
+            } else {
+              return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+            }
+          },
         ),
       ),
       drawer: Drawer(
@@ -43,13 +56,29 @@ class StatisticsScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: colorProvider.primaryColor,
                 ),
-                child: Text(
-                  'Settings',
-                  style: GoogleFonts.poppins(
-                    fontSize: 35,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
-                  ),
+                child: FutureBuilder<String>(
+                  future: translator
+                      .translate('Settings',
+                          to: languageProvider.selectedLanguage)
+                      .then((Translation value) => value.text),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<String> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.done) {
+                      return Text(
+                        snapshot.data!,
+                        style: GoogleFonts.poppins(
+                          fontSize: 35,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                        ),
+                      );
+                    } else {
+                      return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+                    }
+                  },
                 ),
               ),
             ),
@@ -59,13 +88,27 @@ class StatisticsScreen extends StatelessWidget {
                 color: Colors.white, // Set the color of the icon to white
                 size: 25, // Set the size of the icon
               ),
-              title: Text(
-                'Share',
-                style: GoogleFonts.poppins(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                ),
+              title: FutureBuilder<String>(
+                future: translator
+                    .translate('Share', to: languageProvider.selectedLanguage)
+                    .then((Translation value) => value.text),
+                builder:
+                    (BuildContext context, AsyncSnapshot<String> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.connectionState == ConnectionState.done) {
+                    return Text(
+                      snapshot.data!,
+                      style: GoogleFonts.poppins(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                      ),
+                    );
+                  } else {
+                    return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+                  }
+                },
               ),
               onTap: () {
                 // Add your share functionality here
@@ -77,13 +120,28 @@ class StatisticsScreen extends StatelessWidget {
                 color: Colors.white, // Set the color of the icon to white
                 size: 25, // Set the size of the icon
               ),
-              title: Text(
-                'Color Scheme',
-                style: GoogleFonts.poppins(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                ),
+              title: FutureBuilder<String>(
+                future: translator
+                    .translate('Color Scheme',
+                        to: languageProvider.selectedLanguage)
+                    .then((Translation value) => value.text),
+                builder:
+                    (BuildContext context, AsyncSnapshot<String> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.connectionState == ConnectionState.done) {
+                    return Text(
+                      snapshot.data!,
+                      style: GoogleFonts.poppins(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                      ),
+                    );
+                  } else {
+                    return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+                  }
+                },
               ),
               onTap: () {
                 showColorSchemeDialog(context);
@@ -95,13 +153,28 @@ class StatisticsScreen extends StatelessWidget {
                 color: Colors.white, // Set the color of the icon to white
                 size: 25, // Set the size of the icon
               ),
-              title: Text(
-                'Language',
-                style: GoogleFonts.poppins(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                ),
+              title: FutureBuilder<String>(
+                future: translator
+                    .translate('Language',
+                        to: languageProvider.selectedLanguage)
+                    .then((Translation value) => value.text),
+                builder:
+                    (BuildContext context, AsyncSnapshot<String> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.connectionState == ConnectionState.done) {
+                    return Text(
+                      snapshot.data!,
+                      style: GoogleFonts.poppins(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                      ),
+                    );
+                  } else {
+                    return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+                  }
+                },
               ),
               onTap: () {
                 _showLanguageDialog(context, languageProvider);
@@ -122,8 +195,13 @@ class StatisticsScreen extends StatelessWidget {
               SizedBox(height: 20), // Spacer between GPA boxes and button
               editCoursesButton(),
               SizedBox(height: 40),
-              Divider(color: colorProvider.primaryColor, thickness: 5, indent: 20, endIndent: 20,), // Divider with the primary color
-              SizedBox(height: 20), 
+              Divider(
+                color: colorProvider.primaryColor,
+                thickness: 5,
+                indent: 20,
+                endIndent: 20,
+              ), // Divider with the primary color
+              SizedBox(height: 20),
               //WHAT IS GPA EXPLAINATION:
               FutureBuilder<String>(
                 future: translator
@@ -242,7 +320,9 @@ class StatisticsScreen extends StatelessWidget {
                   }
                 },
               ),
-              SizedBox(height: 50,)
+              SizedBox(
+                height: 50,
+              )
             ],
           ),
         ),

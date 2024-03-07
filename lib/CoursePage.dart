@@ -1,15 +1,17 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:intro_to_programming_fbla/StatsPage.dart';
 import 'package:intro_to_programming_fbla/util/AppColors.dart';
 import 'package:intro_to_programming_fbla/util/Course.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:translator/translator.dart';
 import 'main.dart';
 
 class CalculatorScreen extends StatefulWidget {
   @override
   _CalculatorScreenState createState() => _CalculatorScreenState();
-  
 }
 
 class _CalculatorScreenState extends State<CalculatorScreen> {
@@ -36,17 +38,33 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final languageProvider = Provider.of<LanguageProvider>(context);
+    final translator = GoogleTranslator();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.primary,
         shadowColor: Colors.black,
         elevation: 4.0,
-        title: Text(
-          'Update Courses',
-          style: GoogleFonts.poppins(
-              fontSize: 25, // Adjust font size as needed
-              fontWeight: FontWeight.w600,
-              color: Colors.white),
+        title: FutureBuilder<String>(
+          future: translator
+              .translate('Update Courses',
+                  to: languageProvider.selectedLanguage)
+              .then((Translation value) => value.text),
+          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator();
+            } else if (snapshot.connectionState == ConnectionState.done) {
+              return Text(
+                snapshot.data!,
+                style: GoogleFonts.poppins(
+                    fontSize: 25, // Adjust font size as needed
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white),
+              );
+            } else {
+              return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+            }
+          },
         ),
         leading: IconButton(
           icon: Icon(
@@ -142,14 +160,29 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        final languageProvider = Provider.of<LanguageProvider>(context);
+        final translator = GoogleTranslator();
         return AlertDialog(
-          title: Text(
-            'Add Course:',
-            style: GoogleFonts.poppins(
-              fontSize: 25,
-              fontWeight: FontWeight.w400,
-              color: Colors.black,
-            ),
+          title: FutureBuilder<String>(
+            future: translator
+                .translate('Add Course', to: languageProvider.selectedLanguage)
+                .then((Translation value) => value.text),
+            builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              } else if (snapshot.connectionState == ConnectionState.done) {
+                return Text(
+                  snapshot.data!,
+                  style: GoogleFonts.poppins(
+                    fontSize: 25,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.black,
+                  ),
+                );
+              } else {
+                return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+              }
+            },
           ),
           backgroundColor: Colors.white,
           content: Container(
@@ -308,8 +341,30 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        final languageProvider = Provider.of<LanguageProvider>(context);
+        final translator = GoogleTranslator();
         return AlertDialog(
-          title: Text('Edit Course'),
+          title: FutureBuilder<String>(
+            future: translator
+                .translate('Add Course', to: languageProvider.selectedLanguage)
+                .then((Translation value) => value.text),
+            builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              } else if (snapshot.connectionState == ConnectionState.done) {
+                return Text(
+                  snapshot.data!,
+                  style: GoogleFonts.poppins(
+                    fontSize: 25,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.black,
+                  ),
+                );
+              } else {
+                return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+              }
+            },
+          ),
           content: Container(
             width: 320,
             height: 150,
@@ -650,19 +705,35 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   }
 
   Widget printCourses() {
+    final languageProvider = Provider.of<LanguageProvider>(context);
+    final translator = GoogleTranslator();
     List<Widget> courseWidgets = [];
     for (int gradeLevel in gradeLevels) {
       courseWidgets.add(
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Courses for Grade $gradeLevel:',
-              style: GoogleFonts.poppins(
-                fontSize: 23,
-                fontWeight: FontWeight.w600,
-                color: Colors.blueGrey,
-              ),
+            FutureBuilder<String>(
+              future: translator
+                  .translate('Courses for Grade $gradeLevel:',
+                      to: languageProvider.selectedLanguage)
+                  .then((Translation value) => value.text),
+              builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.connectionState == ConnectionState.done) {
+                  return Text(
+                    snapshot.data!,
+                    style: GoogleFonts.poppins(
+                      fontSize: 23,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.blueGrey,
+                    ),
+                  );
+                } else {
+                  return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+                }
+              },
             ),
             ListView.builder(
               shrinkWrap: true,

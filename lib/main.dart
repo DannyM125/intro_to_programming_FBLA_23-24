@@ -10,7 +10,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => LanguageProvider()),
-        ChangeNotifierProvider(create: (context) => ColorProvider()), // Add ColorProvider here
+        ChangeNotifierProvider(create: (context) => ColorProvider()),
       ],
       child: MyApp(),
     ),
