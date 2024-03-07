@@ -10,6 +10,7 @@ class StatisticsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final languageProvider = Provider.of<LanguageProvider>(context);
+    final colorProvider = Provider.of<ColorProvider>(context);
     final translator = GoogleTranslator();
 
     return Scaffold(
@@ -18,7 +19,7 @@ class StatisticsScreen extends StatelessWidget {
           color: Colors.white, // Set the color of the icon to white
           size: 30, // Set the size of the icon
         ),
-        backgroundColor: AppColors.primary,
+        backgroundColor: colorProvider.primaryColor,
         shadowColor: Colors.black,
         elevation: 4.0,
         title: Text(
@@ -32,7 +33,7 @@ class StatisticsScreen extends StatelessWidget {
         ),
       ),
       drawer: Drawer(
-        backgroundColor: AppColors.primary,
+        backgroundColor: colorProvider.primaryColor,
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
@@ -40,7 +41,7 @@ class StatisticsScreen extends StatelessWidget {
               height: 150,
               child: DrawerHeader(
                 decoration: BoxDecoration(
-                  color: AppColors.primary,
+                  color: colorProvider.primaryColor,
                 ),
                 child: Text(
                   'Settings',
@@ -155,6 +156,7 @@ class RoundedGPABox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final languageProvider = Provider.of<LanguageProvider>(context);
+    final colorProvider = Provider.of<ColorProvider>(context);
     final translator = GoogleTranslator();
 
     return FutureBuilder<String>(
@@ -174,7 +176,7 @@ class RoundedGPABox extends StatelessWidget {
               borderRadius: BorderRadius.circular(60),
               border: Border.all(
                 width: 6,
-                color: AppColors.primary,
+                color: colorProvider.primaryColor,
               ),
               boxShadow: [
                 BoxShadow(
@@ -220,6 +222,7 @@ class RoundedWeightedGPABox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final languageProvider = Provider.of<LanguageProvider>(context);
+    final colorProvider = Provider.of<ColorProvider>(context);
     final translator = GoogleTranslator();
 
     return FutureBuilder<String>(
@@ -239,7 +242,7 @@ class RoundedWeightedGPABox extends StatelessWidget {
               borderRadius: BorderRadius.circular(60),
               border: Border.all(
                 width: 6,
-                color: AppColors.primary,
+                color: colorProvider.primaryColor,
               ),
               boxShadow: [
                 BoxShadow(
@@ -285,6 +288,7 @@ class editCoursesButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final languageProvider = Provider.of<LanguageProvider>(context);
+    final colorProvider = Provider.of<ColorProvider>(context);
     final translator = GoogleTranslator();
 
     return ElevatedButton(
@@ -295,7 +299,7 @@ class editCoursesButton extends StatelessWidget {
         );
       },
       style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.primary, // Background color
+        backgroundColor: colorProvider.primaryColor, // Background color
         foregroundColor: Colors.black, // Text color
         shadowColor: Colors.black,
         elevation: 4.0,
@@ -331,29 +335,29 @@ void showColorSchemeDialog(BuildContext context) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return colorSchemeDialog(); // Instantiate and return the dialog widget
+      return ColorSchemeDialog(); // Instantiate and return the dialog widget
     },
   );
 }
 
-class colorSchemeDialog extends StatefulWidget {
+class ColorSchemeDialog extends StatefulWidget {
   @override
   _ColorSchemeDialogState createState() => _ColorSchemeDialogState();
 }
 
-class _ColorSchemeDialogState extends State<colorSchemeDialog> {
+class _ColorSchemeDialogState extends State<ColorSchemeDialog> {
   late String _selectedColor = 'Blue'; // Variable to hold the selected color
 
   Color _getColorFromString(String colorString) {
     switch (colorString) {
       case 'Blue':
         return Colors.blue;
+      case 'Purple':
+        return Colors.purple;
       case 'Red':
         return Colors.red;
       case 'Green':
         return Colors.green;
-      case 'Yellow':
-        return Colors.yellow;
       default:
         return Colors.blue; // Default color
     }
@@ -365,7 +369,12 @@ class _ColorSchemeDialogState extends State<colorSchemeDialog> {
       title: Text('Select Color Scheme'),
       content: DropdownButtonFormField<String>(
         value: _selectedColor, // Default value
-        items: <String>['Blue', 'Red', 'Green', 'Yellow'] // List of colors
+        items: <String>[
+          'Blue',
+          'Purple',
+          'Red',
+          'Green',
+        ] // List of colors
             .map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
@@ -390,7 +399,10 @@ class _ColorSchemeDialogState extends State<colorSchemeDialog> {
         TextButton(
           onPressed: () {
             final selectedColor = _getColorFromString(_selectedColor);
-            AppColors.updatePrimaryColor(selectedColor);
+            Provider.of<ColorProvider>(context, listen: false)
+                .updatePrimaryColor(selectedColor);
+            AppColors.updatePrimaryColor(
+                selectedColor); //to also update it on other pages
             Navigator.of(context).pop();
           },
           child: Text('Apply'),
@@ -399,7 +411,6 @@ class _ColorSchemeDialogState extends State<colorSchemeDialog> {
     );
   }
 }
-
 
 void _showLanguageDialog(
     BuildContext context, LanguageProvider languageProvider) {
@@ -411,131 +422,36 @@ void _showLanguageDialog(
         content: DropdownButtonFormField<String>(
           value: languageProvider.selectedLanguage,
           items: <String>[
-            "af",
-            "sq",
-            "ar-sa",
-            "ar-iq",
-            "ar-eg",
-            "ar-ly",
-            "ar-dz",
-            "ar-ma",
-            "ar-tn",
-            "ar-om",
-            "ar-ye",
-            "ar-sy",
-            "ar-jo",
-            "ar-lb",
-            "ar-kw",
-            "ar-ae",
-            "ar-bh",
-            "ar-qa",
-            "eu",
-            "bg",
-            "be",
-            "ca",
-            "zh-tw",
-            "zh-cn",
-            "zh-hk",
-            "zh-sg",
-            "hr",
-            "cs",
-            "da",
-            "nl",
-            "nl-be",
-            "en",
-            "en-us",
-            "en-gb",
-            "en-au",
-            "en-ca",
-            "en-nz",
-            "en-ie",
-            "en-za",
-            "en-jm",
-            "en-bz",
-            "en-tt",
-            "et",
-            "fo",
-            "fa",
-            "fi",
-            "fr",
-            "fr-be",
-            "fr-ca",
-            "fr-ch",
-            "fr-lu",
-            "gd",
-            "ga",
-            "de",
-            "de-ch",
-            "de-at",
-            "de-lu",
-            "de-li",
-            "el",
-            "he",
-            "hi",
-            "hu",
-            "is",
-            "id",
-            "it",
-            "it-ch",
-            "ja",
-            "ko",
-            "lv",
-            "lt",
-            "mk",
-            "ms",
-            "mt",
-            "no",
-            "pl",
-            "pt-br",
-            "pt",
-            "rm",
-            "ro",
-            "ro-mo",
-            "ru",
-            "ru-mo",
-            "sz",
-            "sr",
-            "sk",
-            "sl",
-            "sb",
-            "es",
-            "es-mx",
-            "es-gt",
-            "es-cr",
-            "es-pa",
-            "es-do",
-            "es-ve",
-            "es-co",
-            "es-pe",
-            "es-ar",
-            "es-ec",
-            "es-cl",
-            "es-uy",
-            "es-py",
-            "es-bo",
-            "es-sv",
-            "es-hn",
-            "es-ni",
-            "es-pr",
-            "sx",
-            "sv",
-            "sv-fi",
-            "th",
-            "ts",
-            "tn",
-            "tr",
-            "uk",
-            "ur",
-            "ve",
-            "vi",
-            "xh",
-            "ji",
-            "zu"
+            "English (en)", // English
+            "Spanish (es)", // Spanish
+            "Chinese - Simplified (zh-cn)", // Chinese (Simplified)
+            "Chinese - Traditional (zh-tw)", // Chinese (Traditional)
+            "Chinese - Hong Kong (zh-hk)", // Chinese (Hong Kong)
+            "Portuguese (pt)", // Portuguese
+            "Gujarati (gu)", // Gujarati
+            "Hindi (hi)", // Hindi
+            "Tagalog/Filipino (tl)", // Tagalog (Filipino)
+            "Korean (ko)", // Korean
+            "Arabic (ar)", // Arabic
+            "Italian (it)", // Italian
+            "Polish (pl)", // Polish
+            "Haitian (ht)", // Haitian
+            "Russian (ru)", // Russian
+            "French (fr)", // French
+            "Urdu (ur)", // Urdu
+            "Telugu (te)", // Telugu
+            "Tamil (ta)", // Tamil
+            "Bengali (bn)", // Bengali
+            "Ukrainian (uk)", // Ukrainian
+            "Greek (el)", // Greek
+            "German (de)", // German
           ] // Add your language options here
               .map<DropdownMenuItem<String>>((String value) {
+            var language = value.substring(0, value.indexOf(' ('));
+            var code = value.substring(value.indexOf('(') + 1, value.indexOf(')'));
             return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
+              value: code,
+              child: Text('$language ($code)'),
             );
           }).toList(),
           onChanged: (String? newValue) {
@@ -564,6 +480,7 @@ void _showLanguageDialog(
   );
 }
 
+
 class LanguageProvider with ChangeNotifier {
   String _selectedLanguage = 'en'; // Default language
 
@@ -571,6 +488,17 @@ class LanguageProvider with ChangeNotifier {
 
   void setLanguage(String language) {
     _selectedLanguage = language;
+    notifyListeners();
+  }
+}
+
+class ColorProvider with ChangeNotifier {
+  late Color _primaryColor = Colors.blue; // Default color
+
+  Color get primaryColor => _primaryColor;
+
+  void updatePrimaryColor(Color color) {
+    _primaryColor = color;
     notifyListeners();
   }
 }

@@ -5,11 +5,13 @@ import 'CoursePage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => LanguageProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => LanguageProvider()),
+        ChangeNotifierProvider(create: (context) => ColorProvider()), // Add ColorProvider here
+      ],
       child: MyApp(),
     ),
   );
@@ -24,7 +26,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Scaffold(
-        body: StatisticsScreen(), // This should be a child of a widget below the ChangeNotifierProvider
+        body: StatisticsScreen(),
       ),
       debugShowCheckedModeBanner: false,
     );
