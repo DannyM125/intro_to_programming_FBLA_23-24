@@ -280,7 +280,8 @@ class RoundedWeightedGPABox extends StatelessWidget {
     final colorProvider = Provider.of<ColorProvider>(context);
     final translator = GoogleTranslator();
 
-    return FutureBuilder<String>(
+    return 
+    FutureBuilder<String>(
       future: translator
           .translate('Weighted GPA', to: languageProvider.selectedLanguage)
           .then((value) => value.toString()),
@@ -400,123 +401,127 @@ class infoDialogButton extends StatelessWidget {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            content: SingleChildScrollView(
-              child: FutureBuilder<String>(
-                future: translator
-                    .translate('What is GPA?',
-                        to: languageProvider.selectedLanguage)
-                    .then((Translation value) => value.text),
-                builder:
-                    (BuildContext context, AsyncSnapshot<String> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else if (snapshot.connectionState == ConnectionState.done) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Center(
-                          child: Text(
-                            snapshot.data!,
-                            style: TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.w600,
+            content: Container(
+              height: 400,
+              child: SingleChildScrollView(
+                child: FutureBuilder<String>(
+                  future: translator
+                      .translate('What is GPA?',
+                          to: languageProvider.selectedLanguage)
+                      .then((Translation value) => value.text),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<String> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.connectionState == ConnectionState.done) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 10,),
+                          Center(
+                            child: Text(
+                              snapshot.data!,
+                              style: TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                            height: 30), // Spacer between text and explanation
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(25, 0, 15, 0),
-                          child: FutureBuilder<Translation>(
-                            future: translator.translate(
-                              'GPA, or Grade Point Average, is a numerical representation of a student\'s academic performance. A students wieghted GPA factors in the level of classes they are taking, such as Dual Enrollment, Advance Placement, Honors, and Acedemic.',
-                              to: languageProvider.selectedLanguage,
-                            ),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<Translation>
-                                    explanationSnapshot) {
-                              if (explanationSnapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return CircularProgressIndicator();
-                              } else if (explanationSnapshot.connectionState ==
-                                  ConnectionState.done) {
-                                List<String> bulletPoints = [
-                                  'GPA is a numerical representation of academic performance.',
-                                  'It is measured on a scale of 0 to 4.0 at our school.',
-                                  'Higher values indicate better performance.',
-                                  'Colleges and universities use GPA during admissions.',
-                                  'Students should use GPA to track progress and set goals.',
-                                ];
-                                List<Widget> translatedBulletPoints =
-                                    bulletPoints.map((bullet) {
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 15),
-                                    child: Row(
-                                      children: [
-                                        Icon(Icons.check_circle,
-                                            color: colorProvider.primaryColor),
-                                        SizedBox(width: 8),
-                                        Expanded(
-                                          child: FutureBuilder<Translation>(
-                                            future: translator.translate(
-                                              bullet,
-                                              to: languageProvider
-                                                  .selectedLanguage,
+                          SizedBox(
+                              height: 30), // Spacer between text and explanation
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+                            child: FutureBuilder<Translation>(
+                              future: translator.translate(
+                                'GPA, or Grade Point Average, is a numerical representation of a student\'s academic performance. A students wieghted GPA factors in the level of classes they are taking, such as Dual Enrollment, Advance Placement, Honors, and Acedemic.',
+                                to: languageProvider.selectedLanguage,
+                              ),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<Translation>
+                                      explanationSnapshot) {
+                                if (explanationSnapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return CircularProgressIndicator();
+                                } else if (explanationSnapshot.connectionState ==
+                                    ConnectionState.done) {
+                                  List<String> bulletPoints = [
+                                    '.....',
+                                    'At our school, UW GPA is measured on a scale of 0 to 4.0.',
+                                    'Higher values indicate better performance.',
+                                    'Colleges and universities use GPA during admissions.',
+                                    'Students should use GPA to track progress and set goals.',
+                                  ];
+                                  List<Widget> translatedBulletPoints =
+                                      bulletPoints.map((bullet) {
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 15),
+                                      child: Row(
+                                        children: [
+                                          Icon(Icons.check_circle,
+                                              color: colorProvider.primaryColor),
+                                          SizedBox(width: 8),
+                                          Expanded(
+                                            child: FutureBuilder<Translation>(
+                                              future: translator.translate(
+                                                bullet,
+                                                to: languageProvider
+                                                    .selectedLanguage,
+                                              ),
+                                              builder: (BuildContext context,
+                                                  AsyncSnapshot<Translation>
+                                                      bulletSnapshot) {
+                                                if (bulletSnapshot
+                                                        .connectionState ==
+                                                    ConnectionState.waiting) {
+                                                  return CircularProgressIndicator();
+                                                } else if (bulletSnapshot
+                                                        .connectionState ==
+                                                    ConnectionState.done) {
+                                                  return Text(
+                                                    bulletSnapshot.data!.text,
+                                                    style:
+                                                        TextStyle(fontSize: 16),
+                                                  );
+                                                } else {
+                                                  return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+                                                }
+                                              },
                                             ),
-                                            builder: (BuildContext context,
-                                                AsyncSnapshot<Translation>
-                                                    bulletSnapshot) {
-                                              if (bulletSnapshot
-                                                      .connectionState ==
-                                                  ConnectionState.waiting) {
-                                                return CircularProgressIndicator();
-                                              } else if (bulletSnapshot
-                                                      .connectionState ==
-                                                  ConnectionState.done) {
-                                                return Text(
-                                                  bulletSnapshot.data!.text,
-                                                  style:
-                                                      TextStyle(fontSize: 16),
-                                                );
-                                              } else {
-                                                return SizedBox(); // Return an empty widget if the future hasn't resolved yet
-                                              }
-                                            },
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                }).toList();
-
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      explanationSnapshot.data!.text,
-                                      style: TextStyle(
-                                        fontSize: 16,
+                                        ],
                                       ),
-                                    ),
-                                    SizedBox(
-                                        height:
-                                            20), // Spacer between explanation and bullet points
-                                    ...translatedBulletPoints, // Spread the list of translated bullet points
-                                  ],
-                                );
-                              } else {
-                                return SizedBox(); // Return an empty widget if the future hasn't resolved yet
-                              }
-                            },
+                                    );
+                                  }).toList();
+              
+                                  return Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        explanationSnapshot.data!.text,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                          height:
+                                              20), // Spacer between explanation and bullet points
+                                      ...translatedBulletPoints, // Spread the list of translated bullet points
+                                    ],
+                                  );
+                                } else {
+                                  return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+                                }
+                              },
+                            ),
                           ),
-                        ),
-                      ],
-                    );
-                  } else {
-                    return SizedBox(); // Return an empty widget if the future hasn't resolved yet
-                  }
-                },
+                        ],
+                      );
+                    } else {
+                      return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+                    }
+                  },
+                ),
               ),
             ),
             actions: [
@@ -625,29 +630,28 @@ void _showLanguageDialog(
         content: DropdownButtonFormField<String>(
           value: languageProvider.selectedLanguage,
           items: <String>[
-            "English (en)", // English
-            "Spanish (es)", // Spanish
-            "Chinese - Simplified (zh-cn)", // Chinese (Simplified)
-            "Chinese - Traditional (zh-tw)", // Chinese (Traditional)
-            "Chinese - Hong Kong (zh-hk)", // Chinese (Hong Kong)
-            "Portuguese (pt)", // Portuguese
-            "Gujarati (gu)", // Gujarati
-            "Hindi (hi)", // Hindi
-            "Tagalog/Filipino (tl)", // Tagalog (Filipino)
-            "Korean (ko)", // Korean
-            "Arabic (ar)", // Arabic
-            "Italian (it)", // Italian
-            "Polish (pl)", // Polish
-            "Haitian (ht)", // Haitian
-            "Russian (ru)", // Russian
-            "French (fr)", // French
-            "Urdu (ur)", // Urdu
-            "Telugu (te)", // Telugu
-            "Tamil (ta)", // Tamil
-            "Bengali (bn)", // Bengali
-            "Ukrainian (uk)", // Ukrainian
-            "Greek (el)", // Greek
-            "German (de)", // German
+            "English (en)",
+            "Spanish (es)", 
+            "Chinese - Simplified (zh-cn)",
+            "Chinese - Traditional (zh-tw)",
+            "Portuguese (pt)", 
+            "Gujarati (gu)",
+            "Hindi (hi)",
+            "Tagalog/Filipino (tl)", 
+            "Korean (ko)", 
+            "Arabic (ar)", 
+            "Italian (it)",
+            "Polish (pl)",
+            "Haitian (ht)",
+            //"Russian (ru)", // TEXT TOO LONG
+            "French (fr)", 
+            "Urdu (ur)", 
+            "Telugu (te)",
+            "Tamil (ta)", 
+            "Bengali (bn)", 
+            "Ukrainian (uk)",
+            "Greek (el)",
+            "German (de)",
           ] // Add your language options here
               .map<DropdownMenuItem<String>>((String value) {
             var language = value.substring(0, value.indexOf(' ('));

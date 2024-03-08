@@ -90,12 +90,29 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                 children: [
                   Row(
                     children: [
-                      Text(
-                        "UW GPA:",
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w800,
-                            color: Colors.blueGrey),
+                      FutureBuilder<String>(
+                        future: translator
+                            .translate('UW GPA:',
+                                to: languageProvider.selectedLanguage)
+                            .then((Translation value) => value.text),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<String> snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return CircularProgressIndicator();
+                          } else if (snapshot.connectionState ==
+                              ConnectionState.done) {
+                            return Text(
+                              snapshot.data!,
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.blueGrey),
+                            );
+                          } else {
+                            return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+                          }
+                        },
                       ),
                       SizedBox(width: 12),
                       Text(
@@ -112,12 +129,28 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               SizedBox(height: 20),
               Row(
                 children: [
-                  Text(
-                    'Weighted GPA:',
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w800,
-                        color: Colors.blueGrey),
+                  FutureBuilder<String>(
+                    future: translator
+                        .translate('Weighted GPA:',
+                            to: languageProvider.selectedLanguage)
+                        .then((Translation value) => value.text),
+                    builder:
+                        (BuildContext context, AsyncSnapshot<String> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      } else if (snapshot.connectionState ==
+                          ConnectionState.done) {
+                        return Text(
+                          snapshot.data!,
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.blueGrey),
+                        );
+                      } else {
+                        return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+                      }
+                    },
                   ),
                   SizedBox(width: 12),
                   Text(
@@ -220,11 +253,28 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                               .map<DropdownMenuItem<int>>((int value) {
                             return DropdownMenuItem<int>(
                               value: value,
-                              child: Text(
-                                'Grade $value',
-                                style: TextStyle(
-                                  fontSize: 20, // Font size
-                                ),
+                              child: FutureBuilder<String>(
+                                future: translator
+                                    .translate('Grade $value',
+                                        to: languageProvider.selectedLanguage)
+                                    .then((Translation value) => value.text),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<String> snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return CircularProgressIndicator();
+                                  } else if (snapshot.connectionState ==
+                                      ConnectionState.done) {
+                                    return Text(
+                                      snapshot.data!,
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                      ),
+                                    );
+                                  } else {
+                                    return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+                                  }
+                                },
                               ),
                             );
                           }).toList(),
@@ -295,13 +345,27 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text(
-                'Cancel',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.normal,
-                  color: Colors.black,
-                ),
+              child: FutureBuilder<String>(
+                future: translator
+                    .translate('Cancel', to: languageProvider.selectedLanguage)
+                    .then((Translation value) => value.text),
+                builder:
+                    (BuildContext context, AsyncSnapshot<String> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.connectionState == ConnectionState.done) {
+                    return Text(
+                      snapshot.data!,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.normal,
+                        color: Colors.black,
+                      ),
+                    );
+                  } else {
+                    return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+                  }
+                },
               ),
             ),
             ElevatedButton(
@@ -312,13 +376,27 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
               ),
-              child: Text(
-                'Add',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.normal,
-                  color: Colors.white,
-                ),
+              child: FutureBuilder<String>(
+                future: translator
+                    .translate('Add', to: languageProvider.selectedLanguage)
+                    .then((Translation value) => value.text),
+                builder:
+                    (BuildContext context, AsyncSnapshot<String> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.connectionState == ConnectionState.done) {
+                    return Text(
+                      snapshot.data!,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.normal,
+                        color: Colors.white,
+                      ),
+                    );
+                  } else {
+                    return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+                  }
+                },
               ),
             ),
           ],
@@ -396,11 +474,28 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                               .map<DropdownMenuItem<int>>((int value) {
                             return DropdownMenuItem<int>(
                               value: value,
-                              child: Text(
-                                'Grade $value',
-                                style: TextStyle(
-                                  fontSize: 20, // Font size
-                                ),
+                              child: FutureBuilder<String>(
+                                future: translator
+                                    .translate('Grade $value',
+                                        to: languageProvider.selectedLanguage)
+                                    .then((Translation value) => value.text),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<String> snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return CircularProgressIndicator();
+                                  } else if (snapshot.connectionState ==
+                                      ConnectionState.done) {
+                                    return Text(
+                                      snapshot.data!,
+                                      style: TextStyle(
+                                        fontSize: 20, // Font size
+                                      ),
+                                    );
+                                  } else {
+                                    return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+                                  }
+                                },
                               ),
                             );
                           }).toList(),
@@ -471,13 +566,27 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text(
-                'Cancel',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.normal,
-                  color: Colors.black,
-                ),
+              child: FutureBuilder<String>(
+                future: translator
+                    .translate('Cancel', to: languageProvider.selectedLanguage)
+                    .then((Translation value) => value.text),
+                builder:
+                    (BuildContext context, AsyncSnapshot<String> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.connectionState == ConnectionState.done) {
+                    return Text(
+                      snapshot.data!,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.normal,
+                        color: Colors.black,
+                      ),
+                    );
+                  } else {
+                    return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+                  }
+                },
               ),
             ),
             ElevatedButton(
@@ -488,13 +597,27 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
               ),
-              child: Text(
-                'Update',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.normal,
-                  color: Colors.white,
-                ),
+              child: FutureBuilder<String>(
+                future: translator
+                    .translate('Update', to: languageProvider.selectedLanguage)
+                    .then((Translation value) => value.text),
+                builder:
+                    (BuildContext context, AsyncSnapshot<String> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.connectionState == ConnectionState.done) {
+                    return Text(
+                      snapshot.data!,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.normal,
+                        color: Colors.white,
+                      ),
+                    );
+                  } else {
+                    return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+                  }
+                },
               ),
             ),
           ],
