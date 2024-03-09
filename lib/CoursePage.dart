@@ -27,6 +27,8 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   List<Course_11> courses_11 = [];
   List<Course_12> courses_12 = [];
   TextEditingController courseNameController = TextEditingController();
+  List<dynamic> filteredCourseNames = [];
+  final List<dynamic> allCourseNames = ['math', 'gym'];
 
   @override
   void initState() {
@@ -177,7 +179,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.primary,
         onPressed: () {
-          _showAddCourseDialog();
+          _showAddCourseDialog(context);
         },
         child: Icon(
           Icons.add,
@@ -190,303 +192,264 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
 
 //Dialog methods:
 
-  void _showAddCourseDialog() {
-    // Set initial values for the dialog fields
-    courseNameController.text = '';
-    selectedGradeLevel = gradeLevels.first;
-    selectedLetterGrade = letterGrades.first;
-    selectedCredits = credits.first;
+void _showAddCourseDialog(BuildContext context) {
+  courseNameController.text = '';
+  selectedGradeLevel = gradeLevels.first;
+  selectedLetterGrade = letterGrades.first;
+  selectedCredits = credits.first;
 
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        final languageProvider = Provider.of<LanguageProvider>(context);
-        final translator = GoogleTranslator();
-        return AlertDialog(
-          title: FutureBuilder<String>(
-            future: translator
-                .translate('Add Course', to: languageProvider.selectedLanguage)
-                .then((Translation value) => value.text),
-            builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
-              } else if (snapshot.connectionState == ConnectionState.done) {
-                return Text(
-                  snapshot.data!,
-                  style: GoogleFonts.poppins(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.black,
-                  ),
-                );
-              } else {
-                return SizedBox(); // Return an empty widget if the future hasn't resolved yet
-              }
-            },
-          ),
-          backgroundColor: Colors.white,
-          content: Container(
-            width: 320,
-            height: 150,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: courseNameController,
-                  decoration: InputDecoration(
-                    labelText: 'Course Name',
-                    labelStyle: GoogleFonts.poppins(
-                      fontSize: 23,
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      final languageProvider = Provider.of<LanguageProvider>(context);
+      final translator = GoogleTranslator();
+      return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+          void _filterCourseNames(String keyword) {
+            setState(() {
+              filteredCourseNames = allCourseNames
+                  .where((courseName) =>
+                      courseName.toLowerCase().contains(keyword.toLowerCase()))
+                  .toList();
+            });
+          }
+
+          return AlertDialog(
+            title: FutureBuilder<String>(
+              future: translator
+                  .translate('Add Course', to: languageProvider.selectedLanguage)
+                  .then((Translation value) => value.text),
+              builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.connectionState == ConnectionState.done) {
+                  return Text(
+                    snapshot.data!,
+                    style: GoogleFonts.poppins(
+                      fontSize: 25,
                       fontWeight: FontWeight.w400,
                       color: Colors.black,
                     ),
+                  );
+                } else {
+                  return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+                }
+              },
+            ),
+            backgroundColor: Colors.white,
+            content: Container(
+              width: 320,
+              height: 300,
+              child: Stack(
+                children: [
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextField(
+                        controller: courseNameController,
+                        onChanged: _filterCourseNames,
+                        decoration: InputDecoration(
+                          labelText: 'Course Name',
+                          labelStyle: GoogleFonts.poppins(
+                            fontSize: 23,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 12),
+                      Expanded(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: filteredCourseNames.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              title: Text(filteredCourseNames[index]),
+                              onTap: () {
+                                courseNameController.text = filteredCourseNames[index];
+                                Navigator.of(context).pop();
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                SizedBox(
-                  height: 12,
-                ),
-                Row(
-                  children: [
-                    StatefulBuilder(
-                      builder: (BuildContext context, StateSetter setState) {
-                        return DropdownButton<int>(
-                          value: selectedGradeLevel,
-                          onChanged: (int? newValue) {
-                            setState(() {
-                              selectedGradeLevel = newValue!;
-                            });
-                          },
-                          items: gradeLevels
-                              .map<DropdownMenuItem<int>>((int value) {
-                            return DropdownMenuItem<int>(
-                              value: value,
-                              child: FutureBuilder<String>(
-                                future: translator
-                                    .translate('Grade $value',
-                                        to: languageProvider.selectedLanguage)
-                                    .then((Translation value) => value.text),
-                                builder: (BuildContext context,
-                                    AsyncSnapshot<String> snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return CircularProgressIndicator();
-                                  } else if (snapshot.connectionState ==
-                                      ConnectionState.done) {
-                                    return Text(
-                                      snapshot.data!,
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                      ),
-                                    );
-                                  } else {
-                                    return SizedBox(); // Return an empty widget if the future hasn't resolved yet
-                                  }
-                                },
-                              ),
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Row(
+                      children: [
+                        StatefulBuilder(
+                          builder: (BuildContext context, StateSetter setState) {
+                            return DropdownButton<int>(
+                              value: selectedGradeLevel,
+                              onChanged: (int? newValue) {
+                                setState(() {
+                                  selectedGradeLevel = newValue!;
+                                });
+                              },
+                              items: gradeLevels
+                                  .map<DropdownMenuItem<int>>((int value) {
+                                return DropdownMenuItem<int>(
+                                  value: value,
+                                  child: FutureBuilder<String>(
+                                    future: translator
+                                        .translate('Grade $value',
+                                            to: languageProvider.selectedLanguage)
+                                        .then((Translation value) => value.text),
+                                    builder: (BuildContext context,
+                                        AsyncSnapshot<String> snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return CircularProgressIndicator();
+                                      } else if (snapshot.connectionState ==
+                                          ConnectionState.done) {
+                                        return Text(
+                                          snapshot.data!,
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                          ),
+                                        );
+                                      } else {
+                                        return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+                                      }
+                                    },
+                                  ),
+                                );
+                              }).toList(),
                             );
-                          }).toList(),
-                        );
-                      },
-                    ),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    StatefulBuilder(
-                      builder: (BuildContext context, StateSetter setState) {
-                        return DropdownButton<String>(
-                          value: selectedLetterGrade,
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              selectedLetterGrade = newValue!;
-                            });
                           },
-                          items: letterGrades
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(
-                                value,
-                                style: TextStyle(
-                                  fontSize: 20, // Font size
-                                ),
-                              ),
+                        ),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        StatefulBuilder(
+                          builder: (BuildContext context, StateSetter setState) {
+                            return DropdownButton<String>(
+                              value: selectedLetterGrade,
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  selectedLetterGrade = newValue!;
+                                });
+                              },
+                              items: letterGrades
+                                  .map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(
+                                    value,
+                                    style: TextStyle(
+                                      fontSize: 20, // Font size
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
                             );
-                          }).toList(),
-                        );
-                      },
-                    ),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    StatefulBuilder(
-                      builder: (BuildContext context, StateSetter setState) {
-                        return DropdownButton<double>(
-                          value: selectedCredits,
-                          onChanged: (double? newValue) {
-                            setState(() {
-                              selectedCredits = newValue!;
-                            });
                           },
-                          items: credits
-                              .map<DropdownMenuItem<double>>((double value) {
-                            return DropdownMenuItem<double>(
-                              value: value,
-                              child: Text(
-                                value.toString(),
-                                style: TextStyle(
-                                  fontSize: 20, // Font size
-                                ),
-                              ),
+                        ),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        StatefulBuilder(
+                          builder: (BuildContext context, StateSetter setState) {
+                            return DropdownButton<double>(
+                              value: selectedCredits,
+                              onChanged: (double? newValue) {
+                                setState(() {
+                                  selectedCredits = newValue!;
+                                });
+                              },
+                              items: credits
+                                  .map<DropdownMenuItem<double>>((double value) {
+                                return DropdownMenuItem<double>(
+                                  value: value,
+                                  child: Text(
+                                    value.toString(),
+                                    style: TextStyle(
+                                      fontSize: 20, // Font size
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
                             );
-                          }).toList(),
-                        );
-                      },
+                          },
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: FutureBuilder<String>(
-                future: translator
-                    .translate('Cancel', to: languageProvider.selectedLanguage)
-                    .then((Translation value) => value.text),
-                builder:
-                    (BuildContext context, AsyncSnapshot<String> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else if (snapshot.connectionState == ConnectionState.done) {
-                    return Text(
-                      snapshot.data!,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.normal,
-                        color: Colors.black,
-                      ),
-                    );
-                  } else {
-                    return SizedBox(); // Return an empty widget if the future hasn't resolved yet
-                  }
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
                 },
+                child: FutureBuilder<String>(
+                  future: translator
+                      .translate('Cancel', to: languageProvider.selectedLanguage)
+                      .then((Translation value) => value.text),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<String> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.connectionState == ConnectionState.done) {
+                      return Text(
+                        snapshot.data!,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.normal,
+                          color: Colors.black,
+                        ),
+                      );
+                    } else {
+                      return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+                    }
+                  },
+                ),
               ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                addCourse();
-                Navigator.of(context).pop();
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-              ),
-              child: FutureBuilder<String>(
-                future: translator
-                    .translate('Add', to: languageProvider.selectedLanguage)
-                    .then((Translation value) => value.text),
-                builder:
-                    (BuildContext context, AsyncSnapshot<String> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else if (snapshot.connectionState == ConnectionState.done) {
-                    return Text(
-                      snapshot.data!,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.normal,
-                        color: Colors.white,
-                      ),
-                    );
-                  } else {
-                    return SizedBox(); // Return an empty widget if the future hasn't resolved yet
-                  }
+              ElevatedButton(
+                onPressed: () {
+                  addCourse();
+                  Navigator.of(context).pop();
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                ),
+                child: FutureBuilder<String>(
+                  future: translator
+                      .translate('Add', to: languageProvider.selectedLanguage)
+                      .then((Translation value) => value.text),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<String> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.connectionState == ConnectionState.done) {
+                      return Text(
+                        snapshot.data!,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.normal,
+                          color: Colors.white,
+                        ),
+                      );
+                    } else {
+                      return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+                    }
+                  },
+                ),
               ),
-            ),
-          ],
-        );
-      },
-    );
-  }
+            ],
+          );
+        },
+      );
+    },
+  );
+}
 
-  //   void _showAddCourseDialog() {
-  //   courseNameController.text = '';
-  //   selectedGradeLevel = gradeLevels.first;
-  //   selectedLetterGrade = letterGrades.first;
-  //   selectedCredits = credits.first;
-  //   filteredCourseNames = [];
 
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return StatefulBuilder(
-  //         builder: (BuildContext context, StateSetter setState) {
-  //           void _filterCourseNames(String keyword) {
-  //             setState(() {
-  //               filteredCourseNames = allCourseNames
-  //                   .where((courseName) =>
-  //                       courseName.toLowerCase().contains(keyword.toLowerCase()))
-  //                   .toList();
-  //             });
-  //           }
-
-  //           return AlertDialog(
-  //             title: Text('Add Course'),
-  //             content: Container(
-  //               width: 320,
-  //               height: 150,
-  //               child: Column(
-  //                 mainAxisSize: MainAxisSize.min,
-  //                 children: [
-  //                   TextField(
-  //                     controller: courseNameController,
-  //                     onChanged: _filterCourseNames,
-  //                     decoration: InputDecoration(
-  //                       labelText: 'Course Name',
-  //                     ),
-  //                   ),
-  //                   SizedBox(height: 12),
-  //                   ListView.builder(
-  //                     shrinkWrap: true,
-  //                     itemCount: filteredCourseNames.length,
-  //                     itemBuilder: (context, index) {
-  //                       return ListTile(
-  //                         title: Text(filteredCourseNames[index]),
-  //                         onTap: () {
-  //                           courseNameController.text = filteredCourseNames[index];
-  //                           Navigator.of(context).pop();
-  //                         },
-  //                       );
-  //                     },
-  //                   ),
-  //                   // Other existing content...
-  //                 ],
-  //               ),
-  //             ),
-  //             actions: [
-  //               TextButton(
-  //                 onPressed: () {
-  //                   Navigator.of(context).pop();
-  //                 },
-  //                 child: Text('Cancel'),
-  //               ),
-  //               ElevatedButton(
-  //                 onPressed: () {
-  //                   addCourse();
-  //                   Navigator.of(context).pop();
-  //                 },
-  //                 child: Text('Add'),
-  //               ),
-  //             ],
-  //           );
-  //         },
-  //       );
-  //     },
-  //   );
-  // }
 
   void _showEditCourseDialog(
     dynamic course,

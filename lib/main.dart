@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Scaffold(
-        body: StatisticsScreen(uwGPA, wGPA), // fix this
+        body: StatisticsScreen(uwGPA, wGPA), //! fix this
       ),
       debugShowCheckedModeBanner: false,
     );
