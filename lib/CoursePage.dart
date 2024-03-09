@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intro_to_programming_fbla/StatsPage.dart';
 import 'package:intro_to_programming_fbla/util/AppColors.dart';
 import 'package:intro_to_programming_fbla/util/Course.dart';
+import 'package:intro_to_programming_fbla/util/GPACalculation.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -26,8 +27,6 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   List<Course_11> courses_11 = [];
   List<Course_12> courses_12 = [];
   TextEditingController courseNameController = TextEditingController();
-
-  double get gpa => calculateGPA();
 
   @override
   void initState() {
@@ -73,7 +72,15 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
             color: Colors.white,
           ), // Use arrow_back icon for back navigation
           onPressed: () {
-            Navigator.pop(context); // Go back to the previous screen
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => StatisticsScreen(
+                      GPACalculation.calculateUWGPA(
+                          courses_9, courses_10, courses_11, courses_12), 
+                      GPACalculation.calculateWeightedGPA(
+                          courses_9, courses_10, courses_11, courses_12))),
+            );
           },
         ),
       ),
@@ -116,7 +123,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                       ),
                       SizedBox(width: 12),
                       Text(
-                        '${calculateGPA().toStringAsFixed(2)}',
+                        '${GPACalculation.calculateUWGPA(courses_9, courses_10, courses_11, courses_12).toStringAsFixed(2)}',
                         style: GoogleFonts.poppins(
                             fontSize: 25, // Adjust font size as needed
                             fontWeight: FontWeight.w700,
@@ -154,7 +161,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                   ),
                   SizedBox(width: 12),
                   Text(
-                    '${calculateWeightedGPA().toStringAsFixed(2)}',
+                    '${GPACalculation.calculateWeightedGPA(courses_9, courses_10, courses_11, courses_12).toStringAsFixed(2)}',
                     style: GoogleFonts.poppins(
                         fontSize: 25, // Adjust font size as needed
                         fontWeight: FontWeight.w700,
@@ -404,6 +411,82 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
       },
     );
   }
+
+  //   void _showAddCourseDialog() {
+  //   courseNameController.text = '';
+  //   selectedGradeLevel = gradeLevels.first;
+  //   selectedLetterGrade = letterGrades.first;
+  //   selectedCredits = credits.first;
+  //   filteredCourseNames = [];
+
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return StatefulBuilder(
+  //         builder: (BuildContext context, StateSetter setState) {
+  //           void _filterCourseNames(String keyword) {
+  //             setState(() {
+  //               filteredCourseNames = allCourseNames
+  //                   .where((courseName) =>
+  //                       courseName.toLowerCase().contains(keyword.toLowerCase()))
+  //                   .toList();
+  //             });
+  //           }
+
+  //           return AlertDialog(
+  //             title: Text('Add Course'),
+  //             content: Container(
+  //               width: 320,
+  //               height: 150,
+  //               child: Column(
+  //                 mainAxisSize: MainAxisSize.min,
+  //                 children: [
+  //                   TextField(
+  //                     controller: courseNameController,
+  //                     onChanged: _filterCourseNames,
+  //                     decoration: InputDecoration(
+  //                       labelText: 'Course Name',
+  //                     ),
+  //                   ),
+  //                   SizedBox(height: 12),
+  //                   ListView.builder(
+  //                     shrinkWrap: true,
+  //                     itemCount: filteredCourseNames.length,
+  //                     itemBuilder: (context, index) {
+  //                       return ListTile(
+  //                         title: Text(filteredCourseNames[index]),
+  //                         onTap: () {
+  //                           courseNameController.text = filteredCourseNames[index];
+  //                           Navigator.of(context).pop();
+  //                         },
+  //                       );
+  //                     },
+  //                   ),
+  //                   // Other existing content...
+  //                 ],
+  //               ),
+  //             ),
+  //             actions: [
+  //               TextButton(
+  //                 onPressed: () {
+  //                   Navigator.of(context).pop();
+  //                 },
+  //                 child: Text('Cancel'),
+  //               ),
+  //               ElevatedButton(
+  //                 onPressed: () {
+  //                   addCourse();
+  //                   Navigator.of(context).pop();
+  //                 },
+  //                 child: Text('Add'),
+  //               ),
+  //             ],
+  //           );
+  //         },
+  //       );
+  //     },
+  //   );
+  // }
 
   void _showEditCourseDialog(
     dynamic course,
@@ -781,6 +864,11 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     coursesJson =
         courses_12.map((course) => jsonEncode(course.toJson())).toList();
     prefs.setStringList('courses_12', coursesJson);
+
+    double uwGPA = GPACalculation.calculateUWGPA(
+        courses_9, courses_10, courses_11, courses_12);
+
+    prefs.setDouble('uwGPA', uwGPA);
   }
 
   void loadCourses() async {
@@ -928,64 +1016,6 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
         return courses_12;
       default:
         return courses_9;
-    }
-  }
-
-//GPA calculation methods:
-
-  double calculateGPA() {
-    int count = 0;
-    double totalPoints = 0;
-    double totalCredits = 0;
-
-    for (int gradeLevel in gradeLevels) {
-      if (getCourseList(gradeLevel).isNotEmpty) {
-        for (var course in getCourseList(gradeLevel)) {
-          totalPoints += gradeToPointUW(course.grade) * course.credits;
-          totalCredits += course.credits;
-        }
-        count++;
-      }
-    }
-
-    return totalCredits != 0 ? totalPoints / totalCredits : 0.0;
-  }
-
-  //TODO this is identical to UW currently
-  //TODO CHANGE THIS TO ACCOUNT FOR DE and AP
-  double calculateWeightedGPA() {
-    int count = 0;
-    double totalPoints = 0;
-    double totalCredits = 0;
-
-    for (int gradeLevel in gradeLevels) {
-      if (getCourseList(gradeLevel).isNotEmpty) {
-        for (var course in getCourseList(gradeLevel)) {
-          totalPoints += gradeToPointUW(course.grade) * course.credits;
-          totalCredits += course.credits;
-        }
-        count++;
-      }
-    }
-    return totalCredits != 0 ? totalPoints / totalCredits : 0.0;
-  }
-
-  double gradeToPointUW(String grade) {
-    switch (grade) {
-      case 'A':
-        return 4.0;
-      case 'B+':
-        return 3.5;
-      case 'B':
-        return 3.0;
-      case 'C+':
-        return 2.5;
-      case 'C':
-        return 2.0;
-      case 'D':
-        return 1.0;
-      default:
-        return 0.0;
     }
   }
 }

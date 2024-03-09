@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intro_to_programming_fbla/CoursePage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:translator/translator.dart';
 import 'CoursePage.dart';
 import 'util/AppColors.dart';
 import 'package:provider/provider.dart';
 
 class StatisticsScreen extends StatelessWidget {
+  double uwGPA = 0.0, wGPA = 0.0;
+
+  StatisticsScreen(this.uwGPA, this.wGPA);
+
   @override
   Widget build(BuildContext context) {
     final languageProvider = Provider.of<LanguageProvider>(context);
@@ -186,16 +191,15 @@ class StatisticsScreen extends StatelessWidget {
           ],
         ),
       ),
-      
       body: SingleChildScrollView(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(height: 100), // Spacer between the boxes and the app bar
-              RoundedGPABox(),
+              RoundedGPABox(uwGPA),
               SizedBox(height: 30), // Spacer between the two boxes
-              RoundedWeightedGPABox(),
+              RoundedWeightedGPABox(wGPA),
               SizedBox(height: 20), // Spacer between GPA boxes and button
               editCoursesButton(),
               SizedBox(height: 40),
@@ -208,6 +212,10 @@ class StatisticsScreen extends StatelessWidget {
 }
 
 class RoundedGPABox extends StatelessWidget {
+  double uwGPA = 0.0;
+
+  RoundedGPABox(this.uwGPA);
+
   @override
   Widget build(BuildContext context) {
     final languageProvider = Provider.of<LanguageProvider>(context);
@@ -246,7 +254,7 @@ class RoundedGPABox extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  '???',
+                  uwGPA.toStringAsFixed(2),
                   style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -274,14 +282,17 @@ class RoundedGPABox extends StatelessWidget {
 }
 
 class RoundedWeightedGPABox extends StatelessWidget {
+  double wGPA = 0.0;
+
+  RoundedWeightedGPABox(this.wGPA);
+
   @override
   Widget build(BuildContext context) {
     final languageProvider = Provider.of<LanguageProvider>(context);
     final colorProvider = Provider.of<ColorProvider>(context);
     final translator = GoogleTranslator();
 
-    return 
-    FutureBuilder<String>(
+    return FutureBuilder<String>(
       future: translator
           .translate('Weighted GPA', to: languageProvider.selectedLanguage)
           .then((value) => value.toString()),
@@ -313,7 +324,7 @@ class RoundedWeightedGPABox extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  '???',
+                  wGPA.toStringAsFixed(2),
                   style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -413,11 +424,14 @@ class infoDialogButton extends StatelessWidget {
                       (BuildContext context, AsyncSnapshot<String> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return CircularProgressIndicator();
-                    } else if (snapshot.connectionState == ConnectionState.done) {
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.done) {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(height: 10,),
+                          SizedBox(
+                            height: 10,
+                          ),
                           Center(
                             child: Text(
                               snapshot.data!,
@@ -428,7 +442,8 @@ class infoDialogButton extends StatelessWidget {
                             ),
                           ),
                           SizedBox(
-                              height: 30), // Spacer between text and explanation
+                              height:
+                                  30), // Spacer between text and explanation
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
                             child: FutureBuilder<Translation>(
@@ -442,7 +457,8 @@ class infoDialogButton extends StatelessWidget {
                                 if (explanationSnapshot.connectionState ==
                                     ConnectionState.waiting) {
                                   return CircularProgressIndicator();
-                                } else if (explanationSnapshot.connectionState ==
+                                } else if (explanationSnapshot
+                                        .connectionState ==
                                     ConnectionState.done) {
                                   List<String> bulletPoints = [
                                     '.....',
@@ -459,7 +475,8 @@ class infoDialogButton extends StatelessWidget {
                                       child: Row(
                                         children: [
                                           Icon(Icons.check_circle,
-                                              color: colorProvider.primaryColor),
+                                              color:
+                                                  colorProvider.primaryColor),
                                           SizedBox(width: 8),
                                           Expanded(
                                             child: FutureBuilder<Translation>(
@@ -493,9 +510,10 @@ class infoDialogButton extends StatelessWidget {
                                       ),
                                     );
                                   }).toList();
-              
+
                                   return Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         explanationSnapshot.data!.text,
@@ -631,24 +649,24 @@ void _showLanguageDialog(
           value: languageProvider.selectedLanguage,
           items: <String>[
             "English (en)",
-            "Spanish (es)", 
+            "Spanish (es)",
             "Chinese - Simplified (zh-cn)",
             "Chinese - Traditional (zh-tw)",
-            "Portuguese (pt)", 
+            "Portuguese (pt)",
             "Gujarati (gu)",
             "Hindi (hi)",
-            "Tagalog/Filipino (tl)", 
-            "Korean (ko)", 
-            "Arabic (ar)", 
+            "Tagalog/Filipino (tl)",
+            "Korean (ko)",
+            "Arabic (ar)",
             "Italian (it)",
             "Polish (pl)",
             "Haitian (ht)",
             //"Russian (ru)", // TEXT TOO LONG
-            "French (fr)", 
-            "Urdu (ur)", 
+            "French (fr)",
+            "Urdu (ur)",
             "Telugu (te)",
-            "Tamil (ta)", 
-            "Bengali (bn)", 
+            "Tamil (ta)",
+            "Bengali (bn)",
             "Ukrainian (uk)",
             "Greek (el)",
             "German (de)",
