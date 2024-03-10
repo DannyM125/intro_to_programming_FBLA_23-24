@@ -29,6 +29,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   List<Course_11> courses_11 = [];
   List<Course_12> courses_12 = [];
   TextEditingController courseNameController = TextEditingController();
+  
 
   @override
   void initState() {
@@ -77,6 +78,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
+                //! Is this why the GPA is not updated right away but only when arrow is pressed?
                   builder: (context) => StatisticsScreen(
                       GPACalculation.calculateUWGPA(
                           courses_9, courses_10, courses_11, courses_12), 

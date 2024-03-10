@@ -29,8 +29,6 @@ class GPACalculation {
     return totalCredits != 0 ? totalPoints / totalCredits : 0.0;
   }
 
-  //TODO this is identical to UW currently
-  //TODO CHANGE THIS TO ACCOUNT FOR DE and AP
   static double calculateWeightedGPA(
       List<Course_9> course_9,
       List<Course_10> course_10,
@@ -45,16 +43,16 @@ class GPACalculation {
       if (courseList.isNotEmpty) {
         for (var course in courseList) {
           if (course.type == 'Honors')
-            totalPoints += (gradeToPointUW(course.grade)+.25) * course.credits;
+            totalPoints += (gradeToPointUW(course.grade)+0.25) * course.credits;
           else if (course.type == 'AP' || course.type == 'Dual Enrollment')
-              totalPoints += (gradeToPointUW(course.grade)+.5) * course.credits;
+              totalPoints += (gradeToPointUW(course.grade)+0.5) * course.credits;
           else
-          totalPoints += gradeToPointUW(course.grade) * course.credits;
+            totalPoints += gradeToPointUW(course.grade) * course.credits;
           totalCredits += course.credits;
         }
       }
     }
-
+    print("${totalPoints}/${totalCredits}");
     return totalCredits != 0 ? totalPoints / totalCredits : 0.0;
   }
 
