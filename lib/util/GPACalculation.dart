@@ -44,6 +44,11 @@ class GPACalculation {
     for (List<Course> courseList in allCourses) {
       if (courseList.isNotEmpty) {
         for (var course in courseList) {
+          if (course.type == 'Honors')
+            totalPoints += (gradeToPointUW(course.grade)+.25) * course.credits;
+          else if (course.type == 'AP' || course.type == 'Dual Enrollment')
+              totalPoints += (gradeToPointUW(course.grade)+.5) * course.credits;
+          else
           totalPoints += gradeToPointUW(course.grade) * course.credits;
           totalCredits += course.credits;
         }

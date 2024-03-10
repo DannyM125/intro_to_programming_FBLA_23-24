@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intro_to_programming_fbla/CoursePage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,6 +18,7 @@ class StatisticsScreen extends StatelessWidget {
     final languageProvider = Provider.of<LanguageProvider>(context);
     final colorProvider = Provider.of<ColorProvider>(context);
     final translator = GoogleTranslator();
+    String textToCopy = ""; // Text to be copied to clipboard
 
     return Scaffold(
       appBar: AppBar(
@@ -98,7 +100,8 @@ class StatisticsScreen extends StatelessWidget {
               ),
               title: FutureBuilder<String>(
                 future: translator
-                    .translate('Share', to: languageProvider.selectedLanguage)
+                    .translate('User Info',
+                        to: languageProvider.selectedLanguage)
                     .then((Translation value) => value.text),
                 builder:
                     (BuildContext context, AsyncSnapshot<String> snapshot) {
@@ -119,7 +122,94 @@ class StatisticsScreen extends StatelessWidget {
                 },
               ),
               onTap: () {
-                // Add your share functionality here
+                if (uwGPA > 3.8)
+                  textToCopy = "UWGPA: ${uwGPA}, Weighted GPA: ${wGPA} \n \n You qualify for the National Honors Society 🎉🎉!! \n\n Great work keep it up!! \n\n Consider appling if you are a junior or higher!"; // Text to be copied to clipboard
+                else if (uwGPA > 3.6)
+                  textToCopy = "UWGPA: ${uwGPA}, Weighted GPA: ${wGPA} \n \n With a little more work, you could qualify for the National Honors Society"; // Text to be copied to clipboard
+                else if (uwGPA < 3.6 && uwGPA > 0)
+                    textToCopy = "UWGPA: ${uwGPA}, Weighted GPA: ${wGPA} \n \n GPA is very important in many different applications!! Make sure you try to maintain a higher GPA!!"; // Text to be copied to clipboard
+                else
+                    textToCopy = "UWGPA: ${uwGPA}, Weighted GPA: ${wGPA} \n \n Press the \"Update Courses\" in order to add a course"; // Text to be copied to clipboard
+
+
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: FutureBuilder<String>(
+                future: translator
+                    .translate('Your Info',
+                        to: languageProvider.selectedLanguage)
+                    .then((Translation value) => value.text),
+                builder:
+                    (BuildContext context, AsyncSnapshot<String> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.connectionState == ConnectionState.done) {
+                    return Text(
+                      snapshot.data!,
+                      style: GoogleFonts.poppins(
+                        fontSize: 25,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                      ),
+                    );
+                  } else {
+                    return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+                  }
+                },
+              ),
+                      content: FutureBuilder<String>(
+                future: translator
+                    .translate(textToCopy,
+                        to: languageProvider.selectedLanguage)
+                    .then((Translation value) => value.text),
+                builder:
+                    (BuildContext context, AsyncSnapshot<String> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.connectionState == ConnectionState.done) {
+                    return Text(
+                      snapshot.data!,
+                      style: GoogleFonts.poppins(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                      ),
+                    );
+                  } else {
+                    return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+                  }
+                },
+              ),
+                      actions: [
+                        TextButton(
+                          child: Text("Copy"),
+                          onPressed: () {
+                            // Copy text to clipboard
+                            Clipboard.setData(ClipboardData(text: textToCopy))
+                                .then((_) {
+                              // Show a SnackBar to indicate that text has been copied
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                      'Text copied to clipboard'),
+                                ),
+                              );
+                            });
+                            Navigator.of(context).pop(); // Close the dialog
+                          },
+                        ),
+                        TextButton(
+                          child: Text("Close"),
+                          onPressed: () {
+                            Navigator.of(context).pop(); // Close the dialog
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
               },
             ),
             ListTile(
@@ -461,11 +551,11 @@ class infoDialogButton extends StatelessWidget {
                                         .connectionState ==
                                     ConnectionState.done) {
                                   List<String> bulletPoints = [
-                                    '.....',
-                                    'At our school, UW GPA is measured on a scale of 0 to 4.0.',
+                                    'At our school, UW GPA is measured on a scale of 0 to 4.0 and UW GPA is measured on a scale of 0 to 4.0.',
                                     'Higher values indicate better performance.',
                                     'Colleges and universities use GPA during admissions.',
                                     'Students should use GPA to track progress and set goals.',
+                                    'Our school has a variety of tutoring programs, if you need assistance, please reach out to a teacher.',
                                   ];
                                   List<Widget> translatedBulletPoints =
                                       bulletPoints.map((bullet) {
