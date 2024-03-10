@@ -123,13 +123,13 @@ class StatisticsScreen extends StatelessWidget {
               ),
               onTap: () {
                 if (uwGPA > 3.8)
-                  textToCopy = "UWGPA: ${uwGPA}, Weighted GPA: ${wGPA} \n \n You qualify for the National Honors Society 🎉🎉!! \n\n Great work keep it up!! \n\n Consider appling if you are a junior or higher!"; // Text to be copied to clipboard
+                  textToCopy = "UWGPA: ${uwGPA.toStringAsFixed(2)}, Weighted GPA: ${wGPA.toStringAsFixed(2)} \n \n You qualify for the National Honors Society 🎉🎉!! \n\n Great work keep it up!! \n\n Consider appling if you are a junior or higher!"; // Text to be copied to clipboard
                 else if (uwGPA > 3.6)
-                  textToCopy = "UWGPA: ${uwGPA}, Weighted GPA: ${wGPA} \n \n With a little more work, you could qualify for the National Honors Society"; // Text to be copied to clipboard
+                  textToCopy = "UWGPA: ${uwGPA.toStringAsFixed(2)}, Weighted GPA: ${wGPA.toStringAsFixed(2)} \n \n With a little more work, you could qualify for the National Honors Society"; // Text to be copied to clipboard
                 else if (uwGPA < 3.6 && uwGPA > 0)
-                    textToCopy = "UWGPA: ${uwGPA}, Weighted GPA: ${wGPA} \n \n GPA is very important in many different applications!! Make sure you try to maintain a higher GPA!!"; // Text to be copied to clipboard
+                    textToCopy = "UWGPA: ${uwGPA.toStringAsFixed(2)}, Weighted GPA: ${wGPA.toStringAsFixed(2)} \n \n GPA is very important in many different applications!! Make sure you try to maintain a higher GPA!!"; // Text to be copied to clipboard
                 else
-                    textToCopy = "UWGPA: ${uwGPA}, Weighted GPA: ${wGPA} \n \n Press the \"Update Courses\" in order to add a course"; // Text to be copied to clipboard
+                    textToCopy = "UWGPA: ${uwGPA.toStringAsFixed(2)}, Weighted GPA: ${wGPA.toStringAsFixed(2)} \n \n Press the \"Update Courses\" in order to add a course"; // Text to be copied to clipboard
 
 
                 showDialog(
@@ -414,7 +414,7 @@ class RoundedWeightedGPABox extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  wGPA.toStringAsFixed(3),
+                  wGPA.toStringAsFixed(2),
                   style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
