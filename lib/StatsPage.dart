@@ -538,8 +538,7 @@ class infoDialogButton extends StatelessWidget {
                             padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
                             child: FutureBuilder<Translation>(
                               future: translator.translate(
-                                'GPA, or Grade Point Average, is a numerical representation of a student\'s academic performance. A students wieghted GPA factors in the level of classes they are taking, such as Dual Enrollment, Advance Placement, Honors, and Acedemic.',
-                                to: languageProvider.selectedLanguage,
+ 'GPA, or Grade Point Average, is a numerical representation of a student\'s academic performance. A student\'s GPA factors in the level of classes they are taking, such as Dual Enrollment, Advanced Placement, Honors, and Academic.',                                to: languageProvider.selectedLanguage,
                               ),
                               builder: (BuildContext context,
                                   AsyncSnapshot<Translation>
@@ -551,7 +550,7 @@ class infoDialogButton extends StatelessWidget {
                                         .connectionState ==
                                     ConnectionState.done) {
                                   List<String> bulletPoints = [
-                                    'At our school, UW GPA is measured on a scale of 0 to 4.0 and UW GPA is measured on a scale of 0 to 4.0.',
+                                    'At our school, UW GPA is \n measured on a scale of \n 0 to 4.0 and UW GPA is measured on a scale of \n 0 to 4.0.',
                                     'Higher values indicate better performance.',
                                     'Colleges and universities use GPA during admissions.',
                                     'Students should use GPA to track progress and set goals.',
