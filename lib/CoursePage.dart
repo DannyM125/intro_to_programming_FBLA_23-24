@@ -894,8 +894,11 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
 
     String uwGPA = GPACalculation.calculateUWGPA(
         courses_9, courses_10, courses_11, courses_12).toStringAsFixed(2);
+      
+    String jsonString = jsonEncode({"uwGPA": uwGPA});
 
-    prefs.setString('uwGPA', uwGPA);
+    // Save JSON string to SharedPreferences
+    prefs.setString('uwGPA', jsonString);
   }
 
   void loadCourses() async {
