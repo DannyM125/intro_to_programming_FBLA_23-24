@@ -123,13 +123,13 @@ class StatisticsScreen extends StatelessWidget {
               ),
               onTap: () {
                 if (uwGPA > 3.8)
-                  textToCopy = "UWGPA: ${uwGPA.toStringAsFixed(2)}, Weighted GPA: ${wGPA.toStringAsFixed(2)} \n \n You qualify for the National Honors Society 🎉🎉!! \n\n Great work keep it up!! \n\n Consider appling if you are a junior or higher!"; // Text to be copied to clipboard
+                  textToCopy = "UWGPA: ${uwGPA.toStringAsFixed(2)}, \nWeighted GPA: ${wGPA.toStringAsFixed(2)} \n \n You qualify for the National Honors Society 🎉🎉!! \n \n Great work keep it up!! \n\n Consider applying if you are a junior or higher!"; // Text to be copied to clipboard
                 else if (uwGPA > 3.6)
-                  textToCopy = "UWGPA: ${uwGPA.toStringAsFixed(2)}, Weighted GPA: ${wGPA.toStringAsFixed(2)} \n \n With a little more work, you could qualify for the National Honors Society"; // Text to be copied to clipboard
+                  textToCopy = "UWGPA: ${uwGPA.toStringAsFixed(2)}, \nWeighted GPA: ${wGPA.toStringAsFixed(2)} \n \n With a little more work, you could qualify for the National Honors Society"; // Text to be copied to clipboard
                 else if (uwGPA < 3.6 && uwGPA > 0)
-                    textToCopy = "UWGPA: ${uwGPA.toStringAsFixed(2)}, Weighted GPA: ${wGPA.toStringAsFixed(2)} \n \n GPA is very important in many different applications!! Make sure you try to maintain a higher GPA!!"; // Text to be copied to clipboard
+                    textToCopy = "UWGPA: ${uwGPA.toStringAsFixed(2)}, \nWeighted GPA: ${wGPA.toStringAsFixed(2)} \n \n GPA is very important in many different applications!! Make sure you try to maintain a higher GPA!!"; // Text to be copied to clipboard
                 else
-                    textToCopy = "UWGPA: ${uwGPA.toStringAsFixed(2)}, Weighted GPA: ${wGPA.toStringAsFixed(2)} \n \n Press the \"Update Courses\" in order to add a course"; // Text to be copied to clipboard
+                    textToCopy = "UWGPA: ${uwGPA.toStringAsFixed(2)}, \nWeighted GPA: ${wGPA.toStringAsFixed(2)} \n \n Press the \"Update Courses\" in order to add a course"; // Text to be copied to clipboard
 
 
                 showDialog(
@@ -673,10 +673,12 @@ class _ColorSchemeDialogState extends State<ColorSchemeDialog> {
         return Colors.red;
       case 'Green':
         return Colors.green;
-      case 'indigo':
+      case 'Indigo':
         return Colors.indigo;
-      case 'pink':
+      case 'Pink':
         return Colors.pink;
+      case 'Black':
+        return Colors.black;
       default:
         return Colors.blue; // Default color
     }
@@ -693,9 +695,9 @@ class _ColorSchemeDialogState extends State<ColorSchemeDialog> {
           'Purple',
           'Red',
           'Green',
-          'indigo',
-          'pink',
-          
+          'Indigo',
+          'Pink',
+          'Black',
         ] // List of colors
             .map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(

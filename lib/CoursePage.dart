@@ -965,7 +965,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                     style: GoogleFonts.poppins(
                       fontSize: 23,
                       fontWeight: FontWeight.w600,
-                      color: Colors.blueGrey,
+                      color: AppColors.primary,
                     ),
                   );
                 } else {
