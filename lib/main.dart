@@ -25,9 +25,9 @@ class MyApp extends StatelessWidget {
   double uwGPA = 0.0, wGPA = 0.0;
 
   // TODO
-  // void initState() {
-  //   getUWGPA();
-  // }
+  void initState() {
+    getUWGPA();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,13 +48,11 @@ class MyApp extends StatelessWidget {
     // Retrieve JSON string from SharedPreferences
     String? jsonString = prefs.getString('uwGPA');
 
-    // Parse JSON string to a Map
-    Map<String, dynamic>? gpaMap =
-        jsonString != null ? json.decode(jsonString) : null;
-
-    // Check if the GPA exists in the map and assign it to uwGPA
-    if (gpaMap != null && gpaMap.containsKey('uwGPA')) {
-      uwGPA = gpaMap['uwGPA']; // Parse the value from the map
+    if (jsonString != null) {
+      String loadedString = jsonString.toString();
+      uwGPA = double.parse(loadedString);
+    } else {
+      uwGPA = 0.0;
     }
   }
 }

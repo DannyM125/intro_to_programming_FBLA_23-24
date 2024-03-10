@@ -892,10 +892,10 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
         courses_12.map((course) => jsonEncode(course.toJson())).toList();
     prefs.setStringList('courses_12', coursesJson);
 
-    double uwGPA = GPACalculation.calculateUWGPA(
-        courses_9, courses_10, courses_11, courses_12);
+    String uwGPA = GPACalculation.calculateUWGPA(
+        courses_9, courses_10, courses_11, courses_12).toStringAsFixed(2);
 
-    prefs.setDouble('uwGPA', uwGPA);
+    prefs.setString('uwGPA', uwGPA);
   }
 
   void loadCourses() async {
