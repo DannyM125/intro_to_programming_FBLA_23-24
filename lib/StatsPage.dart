@@ -414,7 +414,7 @@ class RoundedWeightedGPABox extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  wGPA.toStringAsFixed(2),
+                  wGPA.toStringAsFixed(3),
                   style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -674,6 +674,10 @@ class _ColorSchemeDialogState extends State<ColorSchemeDialog> {
         return Colors.red;
       case 'Green':
         return Colors.green;
+      case 'indigo':
+        return Colors.indigo;
+      case 'pink':
+        return Colors.pink;
       default:
         return Colors.blue; // Default color
     }
@@ -690,6 +694,9 @@ class _ColorSchemeDialogState extends State<ColorSchemeDialog> {
           'Purple',
           'Red',
           'Green',
+          'indigo',
+          'pink',
+          
         ] // List of colors
             .map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
