@@ -127,13 +127,13 @@ class StatisticsScreen extends StatelessWidget {
               ),
               onTap: () {
                 if (uwGPA > 3.8)
-                  textToCopy = "UWGPA: ${uwGPA.toStringAsFixed(2)}, \nWeighted GPA: ${wGPA.toStringAsFixed(2)} \n \n You qualify for the National Honors Society 🎉🎉!! \n \n Great work keep it up!! \n\n Consider applying if you are a junior or higher!"; // Text to be copied to clipboard
+                  textToCopy = "UWGPA: ${uwGPA.toStringAsFixed(2)}, \nWeighted GPA: ${wGPA.toStringAsFixed(2)} \n \nYou qualify for the National Honors Society 🎉🎉!! \n \n Great work keep it up!! \n\n Consider applying if you are a junior or higher!"; // Text to be copied to clipboard
                 else if (uwGPA > 3.6)
-                  textToCopy = "UWGPA: ${uwGPA.toStringAsFixed(2)}, \nWeighted GPA: ${wGPA.toStringAsFixed(2)} \n \n With a little more work, you could qualify for the National Honors Society"; // Text to be copied to clipboard
+                  textToCopy = "UWGPA: ${uwGPA.toStringAsFixed(2)}, \nWeighted GPA: ${wGPA.toStringAsFixed(2)} \n \nWith a little more work, you could qualify for the National Honors Society"; // Text to be copied to clipboard
                 else if (uwGPA < 3.6 && uwGPA > 0)
-                    textToCopy = "UWGPA: ${uwGPA.toStringAsFixed(2)}, \nWeighted GPA: ${wGPA.toStringAsFixed(2)} \n \n GPA is very important in many different applications!! Make sure you try to maintain a higher GPA!!"; // Text to be copied to clipboard
+                    textToCopy = "UWGPA: ${uwGPA.toStringAsFixed(2)}, \nWeighted GPA: ${wGPA.toStringAsFixed(2)} \n \nGPA is very important in many different applications!! Make sure you try to maintain a higher GPA!! \n \nYou need to have more than 3.8 UW GPA to qualify"; // Text to be copied to clipboard
                 else
-                    textToCopy = "UWGPA: ${uwGPA.toStringAsFixed(2)}, \nWeighted GPA: ${wGPA.toStringAsFixed(2)} \n \n Press the \"Update Courses\" in order to add a course"; // Text to be copied to clipboard
+                    textToCopy = "UWGPA: ${uwGPA.toStringAsFixed(2)}, \nWeighted GPA: ${wGPA.toStringAsFixed(2)} \n \nPress the \"Update Courses\" in order to add a course \n \nYou need to have more than 3.8 UW GPA to qualify"; // Text to be copied to clipboard
 
 
                 showDialog(
