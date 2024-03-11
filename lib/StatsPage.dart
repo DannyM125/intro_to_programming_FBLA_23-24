@@ -127,7 +127,7 @@ class StatisticsScreen extends StatelessWidget {
               ),
               onTap: () {
                 if (uwGPA > 3.8)
-                  textToCopy = "UWGPA: ${uwGPA.toStringAsFixed(2)}, \nWeighted GPA: ${wGPA.toStringAsFixed(2)} \n \nYou qualify for the National Honors Society 🎉🎉!! \n \n Great work keep it up!! \n\n Consider applying if you are a junior or higher!"; // Text to be copied to clipboard
+                  textToCopy = "UWGPA: ${uwGPA.toStringAsFixed(2)}, \nWeighted GPA: ${wGPA.toStringAsFixed(2)} \n \nYou qualify for the National Honors Society 🎉🎉!! \n \nGreat work keep it up!! \n\nConsider applying if you are a junior or higher!"; // Text to be copied to clipboard
                 else if (uwGPA > 3.6)
                   textToCopy = "UWGPA: ${uwGPA.toStringAsFixed(2)}, \nWeighted GPA: ${wGPA.toStringAsFixed(2)} \n \nWith a little more work, you could qualify for the National Honors Society"; // Text to be copied to clipboard
                 else if (uwGPA < 3.6 && uwGPA > 0)
