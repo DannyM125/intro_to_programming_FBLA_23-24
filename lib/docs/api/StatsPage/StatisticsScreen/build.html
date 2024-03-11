@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the build method from the StatisticsScreen class, for the Dart programming language.">
+  <title>build method - StatisticsScreen class - StatsPage library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">intro_to_programming_fbla</a></li>
+    <li><a href="../../StatsPage/StatsPage-library.html">StatsPage</a></li>
+    <li><a href="../../StatsPage/StatisticsScreen-class.html">StatisticsScreen</a></li>
+    <li class="self-crumb">build method</li>
+  </ol>
+  <div class="self-name">build</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        brightness_4
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        brightness_5
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+
+  <div
+      id="dartdoc-main-content"
+      class="main-content"
+      data-above-sidebar="StatsPage&#47;StatisticsScreen-class-sidebar.html"
+      data-below-sidebar="">
+      <div>
+<h1><span class="kind-method">build</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+  <div>
+    <ol class="annotation-list">
+        <li>@<a href="https://api.flutter.dev/flutter/dart-core/override-constant.html">override</a></li>
+    </ol>
+  </div>
+
+<span class="returntype"><a href="https://api.flutter.dev/flutter/widgets/Widget-class.html">Widget</a></span>
+<span class="name ">build</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="build-param-context"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/BuildContext-class.html">BuildContext</a></span> <span class="parameter-name">context</span></span></li>
+</ol>)
+
+      <div class="features"><span class="feature">override</span></div>
+
+    </section>
+    
+<section class="desc markdown">
+  <p>Describes the part of the user interface represented by this widget.</p>
+<p>The framework calls this method when this widget is inserted into the tree
+in a given <a href="https://api.flutter.dev/flutter/widgets/BuildContext-class.html">BuildContext</a> and when the dependencies of this widget change
+(e.g., an <a href="https://api.flutter.dev/flutter/widgets/InheritedWidget-class.html">InheritedWidget</a> referenced by this widget changes). This
+method can potentially be called in every frame and should not have any side
+effects beyond building a widget.</p>
+<p>The framework replaces the subtree below this widget with the widget
+returned by this method, either by updating the existing subtree or by
+removing the subtree and inflating a new subtree, depending on whether the
+widget returned by this method can update the root of the existing
+subtree, as determined by calling <a href="https://api.flutter.dev/flutter/widgets/Widget/canUpdate.html">Widget.canUpdate</a>.</p>
+<p>Typically implementations return a newly created constellation of widgets
+that are configured with information from this widget's constructor and
+from the given <a href="https://api.flutter.dev/flutter/widgets/BuildContext-class.html">BuildContext</a>.</p>
+<p>The given <a href="https://api.flutter.dev/flutter/widgets/BuildContext-class.html">BuildContext</a> contains information about the location in the
+tree at which this widget is being built. For example, the context
+provides the set of inherited widgets for this location in the tree. A
+given widget might be built with multiple different <a href="https://api.flutter.dev/flutter/widgets/BuildContext-class.html">BuildContext</a>
+arguments over time if the widget is moved around the tree or if the
+widget is inserted into the tree in multiple places at once.</p>
+<p>The implementation of this method must only depend on:</p>
+<ul>
+<li>the fields of the widget, which themselves must not change over time,
+and</li>
+<li>any ambient state obtained from the <code>context</code> using
+<a href="https://api.flutter.dev/flutter/widgets/BuildContext/dependOnInheritedWidgetOfExactType.html">BuildContext.dependOnInheritedWidgetOfExactType</a>.</li>
+</ul>
+<p>If a widget's <a href="../../StatsPage/StatisticsScreen/build.html">build</a> method is to depend on anything else, use a
+<a href="https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html">StatefulWidget</a> instead.</p>
+<p>See also:</p>
+<ul>
+<li><a href="https://api.flutter.dev/flutter/widgets/StatelessWidget-class.html">StatelessWidget</a>, which contains the discussion on performance considerations.</li>
+</ul>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">@override
+Widget build(BuildContext context) {
+  final languageProvider = Provider.of&lt;LanguageProvider&gt;(context);
+  final colorProvider = Provider.of&lt;ColorProvider&gt;(context);
+  final translator = GoogleTranslator();
+  String textToCopy = &quot;&quot;; &#47;&#47; Text to be copied to clipboard
+
+  return Scaffold(
+    appBar: AppBar(
+      iconTheme: IconThemeData(
+        color: Colors.white, &#47;&#47; Set the color of the icon to white
+        size: 30, &#47;&#47; Set the size of the icon
+      ),
+      backgroundColor: colorProvider.primaryColor,
+      shadowColor: Colors.black,
+      elevation: 4.0,
+      title: FutureBuilder&lt;String&gt;(
+        future: translator
+            .translate(&#39;Your Profile&#39;, to: languageProvider.selectedLanguage)
+            .then((Translation value) =&gt; value.text),
+        builder: (BuildContext context, AsyncSnapshot&lt;String&gt; snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          } else if (snapshot.connectionState == ConnectionState.done) {
+            return Text(
+              snapshot.data!,
+              style: TextStyle(
+                fontSize: 35, &#47;&#47; Font size
+                fontWeight: FontWeight.bold, &#47;&#47; Font weight (bold)
+                fontStyle: FontStyle.italic, &#47;&#47; Font style (italic)
+                color: Colors.white, &#47;&#47; Text color
+              ),
+            );
+          } else {
+            return SizedBox(); &#47;&#47; Return an empty widget if the future hasn&#39;t resolved yet
+          }
+        },
+      ),
+      actions: [
+        InfoDialogButton(),
+      ],
+    ),
+    drawer: Drawer(
+      backgroundColor: colorProvider.primaryColor,
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: &lt;Widget&gt;[
+          SizedBox(
+            height: 150,
+            child: DrawerHeader(
+              decoration: BoxDecoration(
+                color: colorProvider.primaryColor,
+              ),
+              child: FutureBuilder&lt;String&gt;(
+                future: translator
+                    .translate(&#39;Settings&#39;,
+                        to: languageProvider.selectedLanguage)
+                    .then((Translation value) =&gt; value.text),
+                builder:
+                    (BuildContext context, AsyncSnapshot&lt;String&gt; snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.connectionState ==
+                      ConnectionState.done) {
+                    return Text(
+                      snapshot.data!,
+                      style: GoogleFonts.poppins(
+                        fontSize: 35,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                      ),
+                    );
+                  } else {
+                    return SizedBox(); &#47;&#47; Return an empty widget if the future hasn&#39;t resolved yet
+                  }
+                },
+              ),
+            ),
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.share,
+              color: Colors.white, &#47;&#47; Set the color of the icon to white
+              size: 25, &#47;&#47; Set the size of the icon
+            ),
+            title: FutureBuilder&lt;String&gt;(
+              future: translator
+                  .translate(&#39;User Info&#39;,
+                      to: languageProvider.selectedLanguage)
+                  .then((Translation value) =&gt; value.text),
+              builder:
+                  (BuildContext context, AsyncSnapshot&lt;String&gt; snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.connectionState == ConnectionState.done) {
+                  return Text(
+                    snapshot.data!,
+                    style: GoogleFonts.poppins(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
+                  );
+                } else {
+                  return SizedBox(); &#47;&#47; Return an empty widget if the future hasn&#39;t resolved yet
+                }
+              },
+            ),
+            onTap: () {
+              if (uwGPA &gt; 3.8)
+                textToCopy = &quot;UWGPA: ${uwGPA.toStringAsFixed(2)}, \nWeighted GPA: ${wGPA.toStringAsFixed(2)} \n \n You qualify for the National Honors Society 🎉🎉!! \n \n Great work keep it up!! \n\n Consider applying if you are a junior or higher!&quot;; &#47;&#47; Text to be copied to clipboard
+              else if (uwGPA &gt; 3.6)
+                textToCopy = &quot;UWGPA: ${uwGPA.toStringAsFixed(2)}, \nWeighted GPA: ${wGPA.toStringAsFixed(2)} \n \n With a little more work, you could qualify for the National Honors Society&quot;; &#47;&#47; Text to be copied to clipboard
+              else if (uwGPA &lt; 3.6 &amp;&amp; uwGPA &gt; 0)
+                  textToCopy = &quot;UWGPA: ${uwGPA.toStringAsFixed(2)}, \nWeighted GPA: ${wGPA.toStringAsFixed(2)} \n \n GPA is very important in many different applications!! Make sure you try to maintain a higher GPA!!&quot;; &#47;&#47; Text to be copied to clipboard
+              else
+                  textToCopy = &quot;UWGPA: ${uwGPA.toStringAsFixed(2)}, \nWeighted GPA: ${wGPA.toStringAsFixed(2)} \n \n Press the \&quot;Update Courses\&quot; in order to add a course&quot;; &#47;&#47; Text to be copied to clipboard
+
+
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: FutureBuilder&lt;String&gt;(
+              future: translator
+                  .translate(&#39;Your Info&#39;,
+                      to: languageProvider.selectedLanguage)
+                  .then((Translation value) =&gt; value.text),
+              builder:
+                  (BuildContext context, AsyncSnapshot&lt;String&gt; snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.connectionState == ConnectionState.done) {
+                  return Text(
+                    snapshot.data!,
+                    style: GoogleFonts.poppins(
+                      fontSize: 25,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                    ),
+                  );
+                } else {
+                  return SizedBox(); &#47;&#47; Return an empty widget if the future hasn&#39;t resolved yet
+                }
+              },
+            ),
+                    content: FutureBuilder&lt;String&gt;(
+              future: translator
+                  .translate(textToCopy,
+                      to: languageProvider.selectedLanguage)
+                  .then((Translation value) =&gt; value.text),
+              builder:
+                  (BuildContext context, AsyncSnapshot&lt;String&gt; snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.connectionState == ConnectionState.done) {
+                  return Text(
+                    snapshot.data!,
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black,
+                    ),
+                  );
+                } else {
+                  return SizedBox(); &#47;&#47; Return an empty widget if the future hasn&#39;t resolved yet
+                }
+              },
+            ),
+                    actions: [
+                      TextButton(
+                        child: Text(&quot;Copy&quot;),
+                        onPressed: () {
+                          &#47;&#47; Copy text to clipboard
+                          Clipboard.setData(ClipboardData(text: textToCopy))
+                              .then((_) {
+                            &#47;&#47; Show a SnackBar to indicate that text has been copied
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                    &#39;Text copied to clipboard&#39;),
+                              ),
+                            );
+                          });
+                          Navigator.of(context).pop(); &#47;&#47; Close the dialog
+                        },
+                      ),
+                      TextButton(
+                        child: Text(&quot;Close&quot;),
+                        onPressed: () {
+                          Navigator.of(context).pop(); &#47;&#47; Close the dialog
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.color_lens,
+              color: Colors.white, &#47;&#47; Set the color of the icon to white
+              size: 25, &#47;&#47; Set the size of the icon
+            ),
+            title: FutureBuilder&lt;String&gt;(
+              future: translator
+                  .translate(&#39;Color Scheme&#39;,
+                      to: languageProvider.selectedLanguage)
+                  .then((Translation value) =&gt; value.text),
+              builder:
+                  (BuildContext context, AsyncSnapshot&lt;String&gt; snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.connectionState == ConnectionState.done) {
+                  return Text(
+                    snapshot.data!,
+                    style: GoogleFonts.poppins(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
+                  );
+                } else {
+                  return SizedBox(); &#47;&#47; Return an empty widget if the future hasn&#39;t resolved yet
+                }
+              },
+            ),
+            onTap: () {
+              showColorSchemeDialog(context);
+            },
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.language,
+              color: Colors.white, &#47;&#47; Set the color of the icon to white
+              size: 25, &#47;&#47; Set the size of the icon
+            ),
+            title: FutureBuilder&lt;String&gt;(
+              future: translator
+                  .translate(&#39;Language&#39;,
+                      to: languageProvider.selectedLanguage)
+                  .then((Translation value) =&gt; value.text),
+              builder:
+                  (BuildContext context, AsyncSnapshot&lt;String&gt; snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.connectionState == ConnectionState.done) {
+                  return Text(
+                    snapshot.data!,
+                    style: GoogleFonts.poppins(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
+                  );
+                } else {
+                  return SizedBox(); &#47;&#47; Return an empty widget if the future hasn&#39;t resolved yet
+                }
+              },
+            ),
+            onTap: () {
+              showLanguageDialog(context, languageProvider);
+            },
+          ),
+        ],
+      ),
+    ),
+    body: SingleChildScrollView(
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(height: 100), &#47;&#47; Spacer between the boxes and the app bar
+            RoundedGpaBox(uwGPA),
+            SizedBox(height: 30), &#47;&#47; Spacer between the two boxes
+            RoundedWeightedGpaBox(wGPA),
+            SizedBox(height: 20), &#47;&#47; Spacer between GPA boxes and button
+            EditCoursesButton(),
+            SizedBox(height: 40),
+          ],
+        ),
+      ),
+    ),
+  );
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">intro_to_programming_fbla</a></li>
+    <li><a href="../../StatsPage/StatsPage-library.html">StatsPage</a></li>
+    <li><a href="../../StatsPage/StatisticsScreen-class.html">StatisticsScreen</a></li>
+    <li class="self-crumb">build method</li>
+</ol>
+
+
+    <h5>StatisticsScreen class</h5>
+  </div><!--/.sidebar-offcanvas-->
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    intro_to_programming_fbla
+      1.0.0+1
+  </span>
+
+  
+</footer>
+
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+
+
+</body>
+
+</html>
+
