@@ -7,7 +7,6 @@ import 'package:intro_to_programming_fbla/util/GPACalculation.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:translator/translator.dart';
 import 'main.dart';
 
 class CalculatorScreen extends StatefulWidget {
@@ -29,7 +28,6 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   List<Course_11> courses_11 = [];
   List<Course_12> courses_12 = [];
   TextEditingController courseNameController = TextEditingController();
-  
 
   @override
   void initState() {
@@ -40,33 +38,17 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final languageProvider = Provider.of<LanguageProvider>(context);
-    final translator = GoogleTranslator();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.primary,
         shadowColor: Colors.black,
         elevation: 4.0,
-        title: FutureBuilder<String>(
-          future: translator
-              .translate('Update Courses',
-                  to: languageProvider.selectedLanguage)
-              .then((Translation value) => value.text),
-          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
-            } else if (snapshot.connectionState == ConnectionState.done) {
-              return Text(
-                snapshot.data!,
-                style: GoogleFonts.poppins(
-                    fontSize: 25, // Adjust font size as needed
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white),
-              );
-            } else {
-              return SizedBox(); // Return an empty widget if the future hasn't resolved yet
-            }
-          },
+        title: Text(
+          'Update Courses',
+          style: GoogleFonts.poppins(
+              fontSize: 25, // Adjust font size as needed
+              fontWeight: FontWeight.w600,
+              color: Colors.white),
         ),
         leading: IconButton(
           icon: Icon(
@@ -78,10 +60,10 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                //! Is this why the GPA is not updated right away but only when arrow is pressed?
+                  //! Is this why the GPA is not updated right away but only when arrow is pressed?
                   builder: (context) => StatisticsScreen(
                       GPACalculation.calculateUWGPA(
-                          courses_9, courses_10, courses_11, courses_12), 
+                          courses_9, courses_10, courses_11, courses_12),
                       GPACalculation.calculateWeightedGPA(
                           courses_9, courses_10, courses_11, courses_12))),
             );
@@ -101,29 +83,12 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                 children: [
                   Row(
                     children: [
-                      FutureBuilder<String>(
-                        future: translator
-                            .translate('UW GPA:',
-                                to: languageProvider.selectedLanguage)
-                            .then((Translation value) => value.text),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<String> snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return CircularProgressIndicator();
-                          } else if (snapshot.connectionState ==
-                              ConnectionState.done) {
-                            return Text(
-                              snapshot.data!,
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w800,
-                                  color: Colors.blueGrey),
-                            );
-                          } else {
-                            return SizedBox(); // Return an empty widget if the future hasn't resolved yet
-                          }
-                        },
+                      Text(
+                        'UW GPA',
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w800,
+                            color: Colors.blueGrey),
                       ),
                       SizedBox(width: 12),
                       Text(
@@ -140,28 +105,12 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               SizedBox(height: 20),
               Row(
                 children: [
-                  FutureBuilder<String>(
-                    future: translator
-                        .translate('Weighted GPA:',
-                            to: languageProvider.selectedLanguage)
-                        .then((Translation value) => value.text),
-                    builder:
-                        (BuildContext context, AsyncSnapshot<String> snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator();
-                      } else if (snapshot.connectionState ==
-                          ConnectionState.done) {
-                        return Text(
-                          snapshot.data!,
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w800,
-                              color: Colors.blueGrey),
-                        );
-                      } else {
-                        return SizedBox(); // Return an empty widget if the future hasn't resolved yet
-                      }
-                    },
+                  Text(
+                    'Weighted GPA:',
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.blueGrey),
                   ),
                   SizedBox(width: 12),
                   Text(
@@ -205,29 +154,14 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        final languageProvider = Provider.of<LanguageProvider>(context);
-        final translator = GoogleTranslator();
         return AlertDialog(
-          title: FutureBuilder<String>(
-            future: translator
-                .translate('Add Course', to: languageProvider.selectedLanguage)
-                .then((Translation value) => value.text),
-            builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
-              } else if (snapshot.connectionState == ConnectionState.done) {
-                return Text(
-                  snapshot.data!,
-                  style: GoogleFonts.poppins(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.black,
-                  ),
-                );
-              } else {
-                return SizedBox(); // Return an empty widget if the future hasn't resolved yet
-              }
-            },
+          title: Text(
+            'Add Course',
+            style: GoogleFonts.poppins(
+              fontSize: 25,
+              fontWeight: FontWeight.w400,
+              color: Colors.black,
+            ),
           ),
           backgroundColor: Colors.white,
           content: Container(
@@ -264,31 +198,13 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                           items: gradeLevels
                               .map<DropdownMenuItem<int>>((int value) {
                             return DropdownMenuItem<int>(
-                              value: value,
-                              child: FutureBuilder<String>(
-                                future: translator
-                                    .translate('Grade $value',
-                                        to: languageProvider.selectedLanguage)
-                                    .then((Translation value) => value.text),
-                                builder: (BuildContext context,
-                                    AsyncSnapshot<String> snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return CircularProgressIndicator();
-                                  } else if (snapshot.connectionState ==
-                                      ConnectionState.done) {
-                                    return Text(
-                                      snapshot.data!,
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                      ),
-                                    );
-                                  } else {
-                                    return SizedBox(); // Return an empty widget if the future hasn't resolved yet
-                                  }
-                                },
-                              ),
-                            );
+                                value: value,
+                                child: Text(
+                                  'Grade $value',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                  ),
+                                ));
                           }).toList(),
                         );
                       },
@@ -350,46 +266,29 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                   ],
                 ),
                 StatefulBuilder(
-                      builder: (BuildContext context, StateSetter setState) {
-                        return DropdownButton<String>(
-                          value: selectedType,
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              selectedType = newValue!;
-                            });
-                          },
-                          items: courseTypes
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: FutureBuilder<String>(
-                                future: translator
-                                    .translate(value,
-                                        to: languageProvider.selectedLanguage)
-                                    .then((Translation value) => value.text),
-                                builder: (BuildContext context,
-                                    AsyncSnapshot<String> snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return CircularProgressIndicator();
-                                  } else if (snapshot.connectionState ==
-                                      ConnectionState.done) {
-                                    return Text(
-                                      snapshot.data!,
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                      ),
-                                    );
-                                  } else {
-                                    return SizedBox(); // Return an empty widget if the future hasn't resolved yet
-                                  }
-                                },
-                              ),
-                            );
-                          }).toList(),
-                        );
+                  builder: (BuildContext context, StateSetter setState) {
+                    return DropdownButton<String>(
+                      value: selectedType,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedType = newValue!;
+                        });
                       },
-                    ),
+                      items: courseTypes
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(
+                            value,
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    );
+                  },
+                ),
               ],
             ),
           ),
@@ -398,27 +297,13 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: FutureBuilder<String>(
-                future: translator
-                    .translate('Cancel', to: languageProvider.selectedLanguage)
-                    .then((Translation value) => value.text),
-                builder:
-                    (BuildContext context, AsyncSnapshot<String> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else if (snapshot.connectionState == ConnectionState.done) {
-                    return Text(
-                      snapshot.data!,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.normal,
-                        color: Colors.black,
-                      ),
-                    );
-                  } else {
-                    return SizedBox(); // Return an empty widget if the future hasn't resolved yet
-                  }
-                },
+              child: Text(
+                'Cancel',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.normal,
+                  color: Colors.black,
+                ),
               ),
             ),
             ElevatedButton(
@@ -429,27 +314,13 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
               ),
-              child: FutureBuilder<String>(
-                future: translator
-                    .translate('Add', to: languageProvider.selectedLanguage)
-                    .then((Translation value) => value.text),
-                builder:
-                    (BuildContext context, AsyncSnapshot<String> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else if (snapshot.connectionState == ConnectionState.done) {
-                    return Text(
-                      snapshot.data!,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.normal,
-                        color: Colors.white,
-                      ),
-                    );
-                  } else {
-                    return SizedBox(); // Return an empty widget if the future hasn't resolved yet
-                  }
-                },
+              child: Text(
+                'Add',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.normal,
+                  color: Colors.white,
+                ),
               ),
             ),
           ],
@@ -473,29 +344,14 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        final languageProvider = Provider.of<LanguageProvider>(context);
-        final translator = GoogleTranslator();
         return AlertDialog(
-          title: FutureBuilder<String>(
-            future: translator
-                .translate('Edit Course', to: languageProvider.selectedLanguage)
-                .then((Translation value) => value.text),
-            builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
-              } else if (snapshot.connectionState == ConnectionState.done) {
-                return Text(
-                  snapshot.data!,
-                  style: GoogleFonts.poppins(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.black,
-                  ),
-                );
-              } else {
-                return SizedBox(); // Return an empty widget if the future hasn't resolved yet
-              }
-            },
+          title: Text(
+            'Edit Course',
+            style: GoogleFonts.poppins(
+              fontSize: 25,
+              fontWeight: FontWeight.w400,
+              color: Colors.black,
+            ),
           ),
           content: Container(
             width: 320,
@@ -528,29 +384,12 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                               .map<DropdownMenuItem<int>>((int value) {
                             return DropdownMenuItem<int>(
                               value: value,
-                              child: FutureBuilder<String>(
-                                future: translator
-                                    .translate('Grade $value',
-                                        to: languageProvider.selectedLanguage)
-                                    .then((Translation value) => value.text),
-                                builder: (BuildContext context,
-                                    AsyncSnapshot<String> snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return CircularProgressIndicator();
-                                  } else if (snapshot.connectionState ==
-                                      ConnectionState.done) {
-                                    return Text(
-                                      snapshot.data!,
-                                      style: TextStyle(
-                                        fontSize: 20, // Font size
-                                      ),
-                                    );
-                                  } else {
-                                    return SizedBox(); // Return an empty widget if the future hasn't resolved yet
-                                  }
-                                },
-                              ),
+                              child: Text(
+                                'Grade $value',
+                                style: TextStyle(
+                                  fontSize: 20, // Font size
+                                ),
+                              ), 
                             );
                           }).toList(),
                         );
@@ -613,46 +452,29 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                   ],
                 ),
                 StatefulBuilder(
-                      builder: (BuildContext context, StateSetter setState) {
-                        return DropdownButton<String>(
-                          value: selectedType,
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              selectedType = newValue!;
-                            });
-                          },
-                          items: courseTypes
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: FutureBuilder<String>(
-                                future: translator
-                                    .translate(value,
-                                        to: languageProvider.selectedLanguage)
-                                    .then((Translation value) => value.text),
-                                builder: (BuildContext context,
-                                    AsyncSnapshot<String> snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return CircularProgressIndicator();
-                                  } else if (snapshot.connectionState ==
-                                      ConnectionState.done) {
-                                    return Text(
-                                      snapshot.data!,
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                      ),
-                                    );
-                                  } else {
-                                    return SizedBox(); // Return an empty widget if the future hasn't resolved yet
-                                  }
-                                },
-                              ),
-                            );
-                          }).toList(),
-                        );
+                  builder: (BuildContext context, StateSetter setState) {
+                    return DropdownButton<String>(
+                      value: selectedType,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedType = newValue!;
+                        });
                       },
-                    ),
+                      items: courseTypes
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(
+                                  value,
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                  ),
+                        ),
+                        );
+                      }).toList(),
+                    );
+                  },
+                ),
               ],
             ),
           ),
@@ -661,27 +483,13 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: FutureBuilder<String>(
-                future: translator
-                    .translate('Cancel', to: languageProvider.selectedLanguage)
-                    .then((Translation value) => value.text),
-                builder:
-                    (BuildContext context, AsyncSnapshot<String> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else if (snapshot.connectionState == ConnectionState.done) {
-                    return Text(
-                      snapshot.data!,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.normal,
-                        color: Colors.black,
-                      ),
-                    );
-                  } else {
-                    return SizedBox(); // Return an empty widget if the future hasn't resolved yet
-                  }
-                },
+              child: Text(
+                'Cancel',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.normal,
+                  color: Colors.black,
+                ),
               ),
             ),
             ElevatedButton(
@@ -692,27 +500,13 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
               ),
-              child: FutureBuilder<String>(
-                future: translator
-                    .translate('Update', to: languageProvider.selectedLanguage)
-                    .then((Translation value) => value.text),
-                builder:
-                    (BuildContext context, AsyncSnapshot<String> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else if (snapshot.connectionState == ConnectionState.done) {
-                    return Text(
-                      snapshot.data!,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.normal,
-                        color: Colors.white,
-                      ),
-                    );
-                  } else {
-                    return SizedBox(); // Return an empty widget if the future hasn't resolved yet
-                  }
-                },
+              child: Text(
+                'Add',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.normal,
+                  color: Colors.white,
+                ),
               ),
             ),
           ],
@@ -724,15 +518,14 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
 //Edit Course list methods:
   void addCourse() {
     String courseName = courseNameController.text;
-    
+
     if (selectedGradeLevel == 9) {
       if (courseName.isNotEmpty) {
         Course_9 course = Course_9(
           name: courseName,
           grade: selectedLetterGrade,
           credits: selectedCredits,
-                        type: selectedType,
-
+          type: selectedType,
         );
         setState(() {
           courses_9.add(course);
@@ -760,8 +553,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
           name: courseName,
           grade: selectedLetterGrade,
           credits: selectedCredits,
-                    type: selectedType,
-
+          type: selectedType,
         );
         setState(() {
           courses_11.add(course);
@@ -775,8 +567,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
           name: courseName,
           grade: selectedLetterGrade,
           credits: selectedCredits,
-                    type: selectedType,
-
+          type: selectedType,
         );
         setState(() {
           courses_12.add(course);
@@ -836,8 +627,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               name: courseName,
               grade: selectedLetterGrade,
               credits: selectedCredits,
-                            type: selectedType,
-
+              type: selectedType,
             ));
             break;
           case 10:
@@ -854,7 +644,6 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               grade: selectedLetterGrade,
               credits: selectedCredits,
               type: selectedType,
-
             ));
             break;
           case 12:
@@ -862,8 +651,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               name: courseName,
               grade: selectedLetterGrade,
               credits: selectedCredits,
-                            type: selectedType,
-
+              type: selectedType,
             ));
             break;
           default:
@@ -893,8 +681,9 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     prefs.setStringList('courses_12', coursesJson);
 
     String uwGPA = GPACalculation.calculateUWGPA(
-        courses_9, courses_10, courses_11, courses_12).toStringAsFixed(2);
-      
+            courses_9, courses_10, courses_11, courses_12)
+        .toStringAsFixed(2);
+
     String jsonString = jsonEncode({"uwGPA": uwGPA});
 
     // Save JSON string to SharedPreferences
@@ -946,36 +735,20 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   }
 
   Widget printCourses() {
-    final languageProvider = Provider.of<LanguageProvider>(context);
-    final translator = GoogleTranslator();
     List<Widget> courseWidgets = [];
     for (int gradeLevel in gradeLevels) {
       courseWidgets.add(
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            FutureBuilder<String>(
-              future: translator
-                  .translate('Courses for Grade $gradeLevel:',
-                      to: languageProvider.selectedLanguage)
-                  .then((Translation value) => value.text),
-              builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
-                } else if (snapshot.connectionState == ConnectionState.done) {
-                  return Text(
-                    snapshot.data!,
+            Text(
+                    'Courses for Grade $gradeLevel:',
                     style: GoogleFonts.poppins(
                       fontSize: 23,
                       fontWeight: FontWeight.w600,
                       color: AppColors.primary,
                     ),
-                  );
-                } else {
-                  return SizedBox(); // Return an empty widget if the future hasn't resolved yet
-                }
-              },
-            ),
+                  ),
             ListView.builder(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
@@ -991,29 +764,14 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                       color: Colors.black,
                     ),
                   ),
-                  subtitle:FutureBuilder<String>(
-                future: translator
-                    .translate('Grade: ${course.grade}, Credits: ${course.credits}, Type: ${course.type}',
-                        to: languageProvider.selectedLanguage)
-                    .then((Translation value) => value.text),
-                builder:
-                    (BuildContext context, AsyncSnapshot<String> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else if (snapshot.connectionState == ConnectionState.done) {
-                    return Text(
-                      snapshot.data!,
-                      style: GoogleFonts.poppins(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black54,
-                    ),
-                    );
-                  } else {
-                    return SizedBox(); // Return an empty widget if the future hasn't resolved yet
-                  }
-                },
-              ), 
+                  subtitle: Text(
+                          'Grade: ${course.grade}, Credits: ${course.credits}, Type: ${course.type}',
+                          style: GoogleFonts.poppins(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black54,
+                          ),
+                        ),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
