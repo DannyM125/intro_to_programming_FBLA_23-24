@@ -8,6 +8,10 @@ import 'CoursePage.dart';
 import 'util/AppColors.dart';
 import 'package:provider/provider.dart';
 
+
+/**
+ * Widget for displaying statistics screen.
+ */
 class StatisticsScreen extends StatelessWidget {
   double uwGPA = 0.0, wGPA = 0.0;
 
@@ -52,7 +56,7 @@ class StatisticsScreen extends StatelessWidget {
           },
         ),
         actions: [
-          infoDialogButton(),
+          InfoDialogButton(),
         ],
       ),
       drawer: Drawer(
@@ -275,7 +279,7 @@ class StatisticsScreen extends StatelessWidget {
                 },
               ),
               onTap: () {
-                _showLanguageDialog(context, languageProvider);
+                showLanguageDialog(context, languageProvider);
               },
             ),
           ],
@@ -287,11 +291,11 @@ class StatisticsScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(height: 100), // Spacer between the boxes and the app bar
-              RoundedGPABox(uwGPA),
+              RoundedGpaBox(uwGPA),
               SizedBox(height: 30), // Spacer between the two boxes
-              RoundedWeightedGPABox(wGPA),
+              RoundedWeightedGpaBox(wGPA),
               SizedBox(height: 20), // Spacer between GPA boxes and button
-              editCoursesButton(),
+              EditCoursesButton(),
               SizedBox(height: 40),
             ],
           ),
@@ -301,10 +305,13 @@ class StatisticsScreen extends StatelessWidget {
   }
 }
 
-class RoundedGPABox extends StatelessWidget {
-  double uwGPA = 0.0;
+/**
+ * Widget for displaying the unweighted GPA in a rounded box.
+ */
+class RoundedGpaBox extends StatelessWidget {
+  double uwGpa = 0.0;
 
-  RoundedGPABox(this.uwGPA);
+  RoundedGpaBox(this.uwGpa);
 
   @override
   Widget build(BuildContext context) {
@@ -344,7 +351,7 @@ class RoundedGPABox extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  uwGPA.toStringAsFixed(2),
+                  uwGpa.toStringAsFixed(2),
                   style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -371,10 +378,13 @@ class RoundedGPABox extends StatelessWidget {
   }
 }
 
-class RoundedWeightedGPABox extends StatelessWidget {
-  double wGPA = 0.0;
+/**
+ * Widget for displaying the weighted GPA in a rounded box.
+ */
+class RoundedWeightedGpaBox extends StatelessWidget {
+  double wGpa = 0.0;
 
-  RoundedWeightedGPABox(this.wGPA);
+  RoundedWeightedGpaBox(this.wGpa);
 
   @override
   Widget build(BuildContext context) {
@@ -414,7 +424,7 @@ class RoundedWeightedGPABox extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  wGPA.toStringAsFixed(2),
+                  wGpa.toStringAsFixed(2),
                   style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -441,7 +451,10 @@ class RoundedWeightedGPABox extends StatelessWidget {
   }
 }
 
-class editCoursesButton extends StatelessWidget {
+/**
+ * Widget for displaying the button to edit courses.
+ */
+class EditCoursesButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final languageProvider = Provider.of<LanguageProvider>(context);
@@ -488,7 +501,10 @@ class editCoursesButton extends StatelessWidget {
   }
 }
 
-class infoDialogButton extends StatelessWidget {
+/**
+ * Widget for displaying the info dialog button.
+ */
+class InfoDialogButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final languageProvider = Provider.of<LanguageProvider>(context);
@@ -646,6 +662,9 @@ class infoDialogButton extends StatelessWidget {
   }
 }
 
+/**
+ * Function to show the color scheme dialog.
+ */
 void showColorSchemeDialog(BuildContext context) {
   showDialog(
     context: context,
@@ -655,6 +674,9 @@ void showColorSchemeDialog(BuildContext context) {
   );
 }
 
+/**
+ * Dialog widget for selecting the color scheme.
+ */
 class ColorSchemeDialog extends StatefulWidget {
   @override
   _ColorSchemeDialogState createState() => _ColorSchemeDialogState();
@@ -736,74 +758,94 @@ class _ColorSchemeDialogState extends State<ColorSchemeDialog> {
   }
 }
 
-void _showLanguageDialog(
+/**
+ * Function to show the language selection dialog.
+ */
+void showLanguageDialog(
     BuildContext context, LanguageProvider languageProvider) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Select Language'),
-        content: DropdownButtonFormField<String>(
-          value: languageProvider.selectedLanguage,
-          items: <String>[
-            "English (en)",
-            "Spanish (es)",
-            "Chinese - Simplified (zh-cn)",
-            "Chinese - Traditional (zh-tw)",
-            "Portuguese (pt)",
-            "Gujarati (gu)",
-            "Hindi (hi)",
-            "Tagalog/Filipino (tl)",
-            "Korean (ko)",
-            "Arabic (ar)",
-            "Italian (it)",
-            "Polish (pl)",
-            "Haitian (ht)",
-            //"Russian (ru)", // TEXT TOO LONG
-            "French (fr)",
-            "Urdu (ur)",
-            "Telugu (te)",
-            "Tamil (ta)",
-            "Bengali (bn)",
-            "Ukrainian (uk)",
-            "Greek (el)",
-            "German (de)",
-          ] // Add your language options here
-              .map<DropdownMenuItem<String>>((String value) {
-            var language = value.substring(0, value.indexOf(' ('));
-            var code =
-                value.substring(value.indexOf('(') + 1, value.indexOf(')'));
-            return DropdownMenuItem<String>(
-              value: code,
-              child: Text('$language ($code)'),
-            );
-          }).toList(),
-          onChanged: (String? newValue) {
-            if (newValue != null) {
-              languageProvider.setLanguage(newValue);
-            }
-          },
-        ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              // Implement logic for applying the selected language
-            },
-            child: Text('Apply'),
-          ),
-        ],
-      );
+      return LanguageDialog(languageProvider: languageProvider);
     },
   );
 }
 
+/**
+ * Dialog widget for selecting the language.
+ */
+class LanguageDialog extends StatelessWidget {
+  final LanguageProvider languageProvider;
+
+  LanguageDialog({required this.languageProvider});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('Select Language'),
+      content: DropdownButtonFormField<String>(
+        value: languageProvider.selectedLanguage,
+        items: <String>[
+          "English (en)",
+          "Spanish (es)",
+          "Chinese - Simplified (zh-cn)",
+          "Chinese - Traditional (zh-tw)",
+          "Portuguese (pt)",
+          "Gujarati (gu)",
+          "Hindi (hi)",
+          "Tagalog/Filipino (tl)",
+          "Korean (ko)",
+          "Arabic (ar)",
+          "Italian (it)",
+          "Polish (pl)",
+          "Haitian (ht)",
+          //"Russian (ru)", // TEXT TOO LONG
+          "French (fr)",
+          "Urdu (ur)",
+          "Telugu (te)",
+          "Tamil (ta)",
+          "Bengali (bn)",
+          "Ukrainian (uk)",
+          "Greek (el)",
+          "German (de)",
+        ] // Add your language options here
+            .map<DropdownMenuItem<String>>((String value) {
+          var language = value.substring(0, value.indexOf(' ('));
+          var code =
+              value.substring(value.indexOf('(') + 1, value.indexOf(')'));
+          return DropdownMenuItem<String>(
+            value: code,
+            child: Text('$language ($code)'),
+          );
+        }).toList(),
+        onChanged: (String? newValue) {
+          if (newValue != null) {
+            languageProvider.setLanguage(newValue);
+          }
+        },
+      ),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+            // Implement logic for applying the selected language
+          },
+          child: Text('Apply'),
+        ),
+      ],
+    );
+  }
+}
+
+/**
+ * Provider class for managing the selected language.
+ */
 class LanguageProvider with ChangeNotifier {
   String _selectedLanguage = 'en'; // Default language
 
@@ -815,6 +857,9 @@ class LanguageProvider with ChangeNotifier {
   }
 }
 
+/**
+ * Provider class for managing the primary color scheme.
+ */
 class ColorProvider with ChangeNotifier {
   late Color _primaryColor = Colors.blue; // Default color
 

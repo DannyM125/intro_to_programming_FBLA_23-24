@@ -1,3 +1,6 @@
+/**
+ * Main class to run the application.
+ */
 import 'dart:convert';
 import 'dart:ffi';
 
@@ -23,18 +26,24 @@ void main() {
   );
 }
 
+/**
+ * Main application widget.
+ */
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
 }
 
+/**
+ * Main application state.
+ */
 class _MyAppState extends State<MyApp> {
-  double uwGPA = 0.0, wGPA = 0.0;
+  double uwGpa = 0.0, wGpa = 0.0;
 
   @override
   void initState() {
     super.initState();
-    loadGPA();
+    loadGpa();
   }
 
   @override
@@ -44,13 +53,16 @@ class _MyAppState extends State<MyApp> {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Scaffold(
-        body: StatisticsScreen(uwGPA, wGPA),
+        body: StatisticsScreen(uwGpa, wGpa),
       ),
       debugShowCheckedModeBanner: false,
     );
   }
 
-  Future<void> loadGPA() async {
+  /**
+   * Loads GPA data from SharedPreferences.
+   */
+  Future<void> loadGpa() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     List<Course_9> courses9 = [];
@@ -91,9 +103,9 @@ class _MyAppState extends State<MyApp> {
     }
 
     setState(() {
-      uwGPA = GPACalculation.calculateUWGPA(
+      uwGpa = GPACalculation.calculateUWGPA(
           courses9, courses10, courses11, courses12);
-      wGPA = GPACalculation.calculateWeightedGPA(
+      wGpa = GPACalculation.calculateWeightedGPA(
           courses9, courses10, courses11, courses12);
     });
   }

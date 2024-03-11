@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intro_to_programming_fbla/util/Course.dart';
 
+/// A class for calculating GPA based on different methods.
 class GPACalculation {
   //static Color lightAccent = Color.fromRGBO(173, 223, 255, 1);
   static Color primary = Colors.blue;
@@ -8,6 +9,11 @@ class GPACalculation {
 
   //GPA calculation methods:
 
+  /// Calculates the unweighted GPA.
+  ///
+  /// This method takes four lists of courses corresponding to each grade level
+  /// (9th, 10th, 11th, and 12th grades) and calculates the unweighted GPA
+  /// based on the grades and credits of the courses.
   static double calculateUWGPA(
       List<Course_9> course_9,
       List<Course_10> course_10,
@@ -29,6 +35,11 @@ class GPACalculation {
     return totalCredits != 0 ? totalPoints / totalCredits : 0.0;
   }
 
+  /// Calculates the weighted GPA.
+  ///
+  /// This method takes four lists of courses corresponding to each grade level
+  /// (9th, 10th, 11th, and 12th grades) and calculates the weighted GPA
+  /// based on the grades, credits, and type of courses (Honors, AP, Dual Enrollment).
   static double calculateWeightedGPA(
       List<Course_9> course_9,
       List<Course_10> course_10,
@@ -43,9 +54,11 @@ class GPACalculation {
       if (courseList.isNotEmpty) {
         for (var course in courseList) {
           if (course.type == 'Honors')
-            totalPoints += (gradeToPointUW(course.grade)+0.25) * course.credits;
+            totalPoints +=
+                (gradeToPointUW(course.grade) + 0.25) * course.credits;
           else if (course.type == 'AP' || course.type == 'Dual Enrollment')
-              totalPoints += (gradeToPointUW(course.grade)+0.5) * course.credits;
+            totalPoints +=
+                (gradeToPointUW(course.grade) + 0.5) * course.credits;
           else
             totalPoints += gradeToPointUW(course.grade) * course.credits;
           totalCredits += course.credits;
@@ -56,6 +69,10 @@ class GPACalculation {
     return totalCredits != 0 ? totalPoints / totalCredits : 0.0;
   }
 
+  /// Converts a letter grade to its corresponding point value.
+  ///
+  /// This method takes a letter grade as input and returns its corresponding
+  /// unweighted point value based on the standard GPA scale.
   static double gradeToPointUW(String grade) {
     switch (grade) {
       case 'A':
