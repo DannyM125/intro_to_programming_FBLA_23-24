@@ -8,7 +8,6 @@ import 'CoursePage.dart';
 import 'util/AppColors.dart';
 import 'package:provider/provider.dart';
 
-
 /**
  * Widget for displaying statistics screen.
  */
@@ -22,7 +21,8 @@ class StatisticsScreen extends StatelessWidget {
     final languageProvider = Provider.of<LanguageProvider>(context);
     final colorProvider = Provider.of<ColorProvider>(context);
     final translator = GoogleTranslator();
-    String textToCopy = ""; // Text to be copied to clipboard
+    String feedbackText = "";
+    String helpTextToCopy = "hightstownfbla1@gmail.com";
 
     return Scaffold(
       appBar: AppBar(
@@ -127,77 +127,83 @@ class StatisticsScreen extends StatelessWidget {
               ),
               onTap: () {
                 if (uwGPA > 3.8)
-                  textToCopy = "UWGPA: ${uwGPA.toStringAsFixed(2)}, \nWeighted GPA: ${wGPA.toStringAsFixed(2)} \n \nYou qualify for the National Honors Society 🎉🎉!! \n \nGreat work keep it up!! \n\nConsider applying if you are a junior or higher!"; // Text to be copied to clipboard
+                  feedbackText =
+                      "UWGPA: ${uwGPA.toStringAsFixed(2)}, \nWeighted GPA: ${wGPA.toStringAsFixed(2)} \n \n You qualify for the National Honors Society 🎉🎉!! \n \n Great work keep it up!! \n\n Consider applying if you are a junior or higher!"; // Text to be copied to clipboard
                 else if (uwGPA > 3.6)
-                  textToCopy = "UWGPA: ${uwGPA.toStringAsFixed(2)}, \nWeighted GPA: ${wGPA.toStringAsFixed(2)} \n \nWith a little more work, you could qualify for the National Honors Society"; // Text to be copied to clipboard
+                  feedbackText =
+                      "UWGPA: ${uwGPA.toStringAsFixed(2)}, \nWeighted GPA: ${wGPA.toStringAsFixed(2)} \n \n With a little more work, you could qualify for the National Honors Society"; // Text to be copied to clipboard
                 else if (uwGPA < 3.6 && uwGPA > 0)
-                    textToCopy = "UWGPA: ${uwGPA.toStringAsFixed(2)}, \nWeighted GPA: ${wGPA.toStringAsFixed(2)} \n \nGPA is very important in many different applications!! Make sure you try to maintain a higher GPA!! \n \nYou need to have more than 3.8 UW GPA to qualify"; // Text to be copied to clipboard
+                  feedbackText =
+                      "UWGPA: ${uwGPA.toStringAsFixed(2)}, \nWeighted GPA: ${wGPA.toStringAsFixed(2)} \n \n GPA is very important in many different applications!! Make sure you try to maintain a higher GPA!!"; // Text to be copied to clipboard
                 else
-                    textToCopy = "UWGPA: ${uwGPA.toStringAsFixed(2)}, \nWeighted GPA: ${wGPA.toStringAsFixed(2)} \n \nPress the \"Update Courses\" in order to add a course \n \nYou need to have more than 3.8 UW GPA to qualify"; // Text to be copied to clipboard
-
+                  feedbackText =
+                      "UWGPA: ${uwGPA.toStringAsFixed(2)}, \nWeighted GPA: ${wGPA.toStringAsFixed(2)} \n \n Press the \"Update Courses\" in order to add a course"; // Text to be copied to clipboard
 
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
                       title: FutureBuilder<String>(
-                future: translator
-                    .translate('Your Info',
-                        to: languageProvider.selectedLanguage)
-                    .then((Translation value) => value.text),
-                builder:
-                    (BuildContext context, AsyncSnapshot<String> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else if (snapshot.connectionState == ConnectionState.done) {
-                    return Text(
-                      snapshot.data!,
-                      style: GoogleFonts.poppins(
-                        fontSize: 25,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black,
+                        future: translator
+                            .translate('Your Info',
+                                to: languageProvider.selectedLanguage)
+                            .then((Translation value) => value.text),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<String> snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return CircularProgressIndicator();
+                          } else if (snapshot.connectionState ==
+                              ConnectionState.done) {
+                            return Text(
+                              snapshot.data!,
+                              style: GoogleFonts.poppins(
+                                fontSize: 25,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black,
+                              ),
+                            );
+                          } else {
+                            return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+                          }
+                        },
                       ),
-                    );
-                  } else {
-                    return SizedBox(); // Return an empty widget if the future hasn't resolved yet
-                  }
-                },
-              ),
                       content: FutureBuilder<String>(
-                future: translator
-                    .translate(textToCopy,
-                        to: languageProvider.selectedLanguage)
-                    .then((Translation value) => value.text),
-                builder:
-                    (BuildContext context, AsyncSnapshot<String> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else if (snapshot.connectionState == ConnectionState.done) {
-                    return Text(
-                      snapshot.data!,
-                      style: GoogleFonts.poppins(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black,
+                        future: translator
+                            .translate(feedbackText,
+                                to: languageProvider.selectedLanguage)
+                            .then((Translation value) => value.text),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<String> snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return CircularProgressIndicator();
+                          } else if (snapshot.connectionState ==
+                              ConnectionState.done) {
+                            return Text(
+                              snapshot.data!,
+                              style: GoogleFonts.poppins(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black,
+                              ),
+                            );
+                          } else {
+                            return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+                          }
+                        },
                       ),
-                    );
-                  } else {
-                    return SizedBox(); // Return an empty widget if the future hasn't resolved yet
-                  }
-                },
-              ),
                       actions: [
                         TextButton(
                           child: Text("Copy"),
                           onPressed: () {
                             // Copy text to clipboard
-                            Clipboard.setData(ClipboardData(text: textToCopy))
+                            Clipboard.setData(ClipboardData(text: feedbackText))
                                 .then((_) {
                               // Show a SnackBar to indicate that text has been copied
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text(
-                                      'Text copied to clipboard'),
+                                  content: Text('Text copied to clipboard'),
                                 ),
                               );
                             });
@@ -280,6 +286,197 @@ class StatisticsScreen extends StatelessWidget {
               ),
               onTap: () {
                 showLanguageDialog(context, languageProvider);
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.question_answer,
+                color: Colors.white, // Set the color of the icon to white
+                size: 25, // Set the size of the icon
+              ),
+              title: FutureBuilder<String>(
+                future: translator
+                    .translate('Help', to: languageProvider.selectedLanguage)
+                    .then((Translation value) => value.text),
+                builder:
+                    (BuildContext context, AsyncSnapshot<String> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.connectionState == ConnectionState.done) {
+                    return Text(
+                      snapshot.data!,
+                      style: GoogleFonts.poppins(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                      ),
+                    );
+                  } else {
+                    return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+                  }
+                },
+              ),
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: FutureBuilder<String>(
+                        future: translator
+                            .translate('How to use the app:',
+                                to: languageProvider.selectedLanguage)
+                            .then((Translation value) => value.text),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<String> snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return CircularProgressIndicator();
+                          } else if (snapshot.connectionState ==
+                              ConnectionState.done) {
+                            return Text(
+                              snapshot.data!,
+                              style: GoogleFonts.poppins(
+                                fontSize: 25,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black,
+                              ),
+                            );
+                          } else {
+                            return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+                          }
+                        },
+                      ),
+                      content: Container(
+                        height: 370,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              FutureBuilder<String>(
+                                future: translator.translate("""
+1) Press the "Update Courses" button
+
+2) Press the plus sign in the bottom right corner
+
+3) Enter the details of your course like the name and grade level.
+
+4) Add the rest of your courses, and check your GPA!!
+                              """,
+                                    to:
+                                        languageProvider.selectedLanguage).then(
+                                    (Translation value) => value.text),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<String> snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return CircularProgressIndicator();
+                                  } else if (snapshot.connectionState ==
+                                      ConnectionState.done) {
+                                    return Text(
+                                      snapshot.data!,
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.black,
+                                      ),
+                                    );
+                                  } else {
+                                    return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+                                  }
+                                },
+                              ),
+                              FutureBuilder<String>(
+                                future: translator.translate("""
+
+  - In order to edit a course, press the pencil button next to the course.
+  - In order to deleted a course, press the trash button button.
+                      
+
+                              """,
+                                    to:
+                                        languageProvider.selectedLanguage).then(
+                                    (Translation value) => value.text),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<String> snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return CircularProgressIndicator();
+                                  } else if (snapshot.connectionState ==
+                                      ConnectionState.done) {
+                                    return Text(
+                                      snapshot.data!,
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.black,
+                                      ),
+                                    );
+                                  } else {
+                                    return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+                                  }
+                                },
+                              ),
+                              SizedBox(height: 20,),
+                              FutureBuilder<String>(
+                                future: translator.translate("""
+If you have any questions, please contact someone from Hightstown FBLA:
+- ${helpTextToCopy}
+                              """,
+                                    to:
+                                        languageProvider.selectedLanguage).then(
+                                    (Translation value) => value.text),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<String> snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return CircularProgressIndicator();
+                                  } else if (snapshot.connectionState ==
+                                      ConnectionState.done) {
+                                    return Text(
+                                      snapshot.data!,
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColors.primary,
+                                      ),
+                                    );
+                                  } else {
+                                    return SizedBox(); // Return an empty widget if the future hasn't resolved yet
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                          
+                        ),
+                      ),
+                      actions: [
+                        TextButton(
+                          child: Text("Copy Email"),
+                          onPressed: () {
+                            // Copy text to clipboard
+                            Clipboard.setData(
+                                    ClipboardData(text: helpTextToCopy))
+                                .then((_) {
+                              // Show a SnackBar to indicate that text has been copied
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Text copied to clipboard'),
+                                ),
+                              );
+                            });
+                            Navigator.of(context).pop(); // Close the dialog
+                          },
+                        ),
+                        TextButton(
+                          child: Text("Close"),
+                          onPressed: () {
+                            Navigator.of(context).pop(); // Close the dialog
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
               },
             ),
           ],
@@ -554,7 +751,8 @@ class InfoDialogButton extends StatelessWidget {
                             padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
                             child: FutureBuilder<Translation>(
                               future: translator.translate(
- 'GPA, or Grade Point Average, is a numerical representation of a student\'s academic performance. A student\'s GPA factors in the level of classes they are taking, such as Dual Enrollment, Advanced Placement, Honors, and Academic.',                                to: languageProvider.selectedLanguage,
+                                'GPA, or Grade Point Average, is a numerical representation of a student\'s academic performance. A student\'s GPA factors in the level of classes they are taking, such as Dual Enrollment, Advanced Placement, Honors, and Academic.',
+                                to: languageProvider.selectedLanguage,
                               ),
                               builder: (BuildContext context,
                                   AsyncSnapshot<Translation>

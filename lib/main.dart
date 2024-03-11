@@ -2,7 +2,6 @@
  * Main class to run the application.
  */
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:intro_to_programming_fbla/StatsPage.dart';
