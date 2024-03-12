@@ -501,7 +501,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                 backgroundColor: AppColors.primary,
               ),
               child: Text(
-                'Add',
+                'Update',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.normal,
