@@ -157,6 +157,24 @@ class StatisticsScreen extends StatelessWidget {
             ),
             ListTile(
               leading: Icon(
+                Icons.language,
+                color: Colors.white, // Set the color of the icon to white
+                size: 25, // Set the size of the icon
+              ),
+              title: Text(
+                      'Language',
+                      style: GoogleFonts.poppins(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                      ),
+                    ),
+              onTap: () {
+
+              },
+            ),
+            ListTile(
+              leading: Icon(
                 Icons.question_answer,
                 color: Colors.white, // Set the color of the icon to white
                 size: 25, // Set the size of the icon
@@ -264,6 +282,7 @@ If you have any questions, please contact someone from Hightstown FBLA:
                 );
               },
             ),
+            
           ],
         ),
       ),
