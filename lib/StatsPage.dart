@@ -170,7 +170,7 @@ class StatisticsScreen extends StatelessWidget {
                       ),
                     ),
               onTap: () {
-
+                showLanguageDialog(context);
               },
             ),
             ListTile(
@@ -725,5 +725,83 @@ class ColorProvider with ChangeNotifier {
   void updatePrimaryColor(Color color) {
     _primaryColor = color;
     notifyListeners();
+  }
+}
+
+void showLanguageDialog(
+    BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return LanguageDialog();
+    },
+  );
+}
+
+/**
+ * Dialog widget for selecting the language.
+ */
+class LanguageDialog extends StatelessWidget {
+  LanguageDialog();
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('Select Language'),
+      content: DropdownButtonFormField<String>(
+        value: "en",
+        items: <String>[
+          "English (en)",
+          "Spanish (es)",
+          "Chinese - Simplified (zh-cn)",
+          "Chinese - Traditional (zh-tw)",
+          "Portuguese (pt)",
+          "Gujarati (gu)",
+          "Hindi (hi)",
+          "Tagalog/Filipino (tl)",
+          "Korean (ko)",
+          "Arabic (ar)",
+          "Italian (it)",
+          "Polish (pl)",
+          "Haitian (ht)",
+          //"Russian (ru)", // TEXT TOO LONG
+          "French (fr)",
+          "Urdu (ur)",
+          "Telugu (te)",
+          "Tamil (ta)",
+          "Bengali (bn)",
+          "Ukrainian (uk)",
+          "Greek (el)",
+          "German (de)",
+        ] // Add your language options here
+            .map<DropdownMenuItem<String>>((String value) {
+          var language = value.substring(0, value.indexOf(' ('));
+          var code =
+              value.substring(value.indexOf('(') + 1, value.indexOf(')'));
+          return DropdownMenuItem<String>(
+            value: code,
+            child: Text('$language ($code)'),
+          );
+        }).toList(),
+        onChanged: (String? newValue) {
+          
+        },
+      ),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+            // Implement logic for applying the selected language
+          },
+          child: Text('Apply'),
+        ),
+      ],
+    );
   }
 }
